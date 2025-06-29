@@ -1,13 +1,18 @@
-import { Pool } from 'pg';
 import {config} from 'dotenv';
+import { DataSource } from 'typeorm';
+import { User } from '../entities/User';
 config();
 
-const pool = new Pool({
+const AppDataSource = new DataSource({
+    type: 'postgres',
     host: process.env.DB_HOST,
     database: process.env.DB_NAME,
-    user: process.env.DB_USERNAME,
+    username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : undefined,
+    entities:[User],
+    synchronize: true,
+    logging: false,
 });
 
-export default pool;
+export default AppDataSource;
