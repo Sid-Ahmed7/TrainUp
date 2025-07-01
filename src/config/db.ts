@@ -1,6 +1,8 @@
 import {config} from 'dotenv';
 import { DataSource } from 'typeorm';
 import { User } from '../entities/User';
+import { Category } from '../entities/Category';
+import { Target } from '../entities/Target';
 config();
 
 const AppDataSource = new DataSource({
@@ -10,7 +12,7 @@ const AppDataSource = new DataSource({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : undefined,
-    entities:[User],
+    entities:[User, Category, Target],
     synchronize: true,
     logging: false,
 });
