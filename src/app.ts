@@ -18,6 +18,8 @@ app.use(cors(corsOptions))
 app.use('/api/auth', routes.authRoutes)
 app.use('/api/categorie', routes.categoryRoutes)
 app.use('/api/target', routes.targetRoutes)
-
+app.use('/api/exercice', routes.typeExerciceRoutes)
+app.use('/api/equipment', routes.equipmentRoutes)
+app.use('/api/exercice-equipment', routes.typeExerciceEquipmentRoutes)
 export default app;
 export {AppDataSource}
