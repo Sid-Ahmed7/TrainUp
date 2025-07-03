@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { TypeExercice } from "./TypeExercice";
-import { Equipment } from "./Equipmpent";
+import { Equipment } from "./Equipment";
 
 @Entity()
 export class TypeExerciceEquipment {

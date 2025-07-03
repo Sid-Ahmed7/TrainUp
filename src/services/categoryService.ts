@@ -18,9 +18,10 @@ export const updateCategory = async (categoryId: number, category: Partial<Categ
     if(!updatedCategory) {
         return 
     }
-        await categoryRepository.update(categoryId,category)
+       const res = await categoryRepository.update(categoryId,category)
 
-    return categoryRepository.save(updatedCategory);
+      return res.affected !== 0;
+
 }   
 
 export const findAllCategories = () => {

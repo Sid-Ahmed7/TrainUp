@@ -3,8 +3,8 @@ import { Exclude, Expose} from "class-transformer";
 
 export class CreateTypeExerciceEquipmentDTO {
   @Expose()
-  exerciceId!: number; 
+  exercice!: number; 
 
   @Expose()
-  equipmentId!: number; 
+  equipment!: number; 
 }

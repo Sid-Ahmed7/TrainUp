@@ -3,7 +3,7 @@ import { DifficultyLevel } from "../../enums/DifficultyLevel";
 import { Environment } from "../../enums/Environment";
 import { CreateTypeExerciceEquipmentDTO } from "../TypeExerciceEquipment/CreateTypeExerciceEquipmentDTO";
 
-export class UpdateTypeExerciceDto {
+export class UpdateTypeExerciceDTO {
   @Expose()
   name?: string;
 

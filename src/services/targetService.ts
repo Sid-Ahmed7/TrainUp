@@ -16,9 +16,10 @@ export const updateTarget = async (targetId: number, target: Partial<Target>) =>
     if(!updatedTarget) {
         return 
     }
-    await targetRepository.update(targetId,target)
+    const res =await targetRepository.update(targetId,target)
 
-    return targetRepository.save(updatedTarget);
+          return res.affected !== 0;
+;
 }   
 
 export const findAllTarget = () => {

@@ -2,8 +2,8 @@ import { Expose } from "class-transformer";
 
 export class UpdateTypeExerciceEquipmentDTO {
   @Expose()
-  exerciceId?: number;
+  exercice?: number;
 
   @Expose()
-  equipmentId?: number;
+  equipment?: number;
 }

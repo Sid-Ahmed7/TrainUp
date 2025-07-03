@@ -4,7 +4,7 @@ import { Environment } from "../../enums/Environment";
 import { CreateTypeExerciceEquipmentDTO } from "../TypeExerciceEquipment/CreateTypeExerciceEquipmentDTO";
 
 
-export class CreateTypeExerciceDto {
+export class CreateTypeExerciceDTO {
   @Expose()
   name!: string;
 
