@@ -17,7 +17,7 @@ export const updateCategory = async (categoryId: number, category: Partial<Categ
     }
        const res = await categoryRepository.update(categoryId,category)
 
-      return res.affected !== 0;
+      return res;
 
 }   
 

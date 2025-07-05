@@ -15,7 +15,7 @@ export const updateEquipment = async (equipmentId: number, equipment: Partial<Eq
     }
 
     const res = await equipmentRepository.update(equipmentId, equipment);
-    return res.affected !== 0;
+    return res;
 }
 
 export const findAllEquipments = () => {

@@ -16,7 +16,7 @@ export const updateTarget = async (targetId: number, target: Partial<Target>) =>
     }
     const res =await targetRepository.update(targetId,target)
 
-          return res.affected !== 0;
+          return res;
 ;
 }   
 
