@@ -26,6 +26,12 @@ cd trainup
 npm install
 ```
 
+3. Générer deux secrets pour JWT et REFRESH_JWT
+
+```shell
+openssl rand -hex 32
+```
+
 3. Créez un fichier .env
 ```shell
 DB_HOST=DB_HOST
@@ -35,6 +41,7 @@ DB_PASSWORD=DB_PASSWORD
 DB_NAME=DB_NAME
 PORT=PORT
 JWT_SECRET=JWT_SECRET
+JWT_SECRET_REFRESH=JWT_SECRET_REFRESH
 ```
 
 4. Compiler et Démarrer le serveur

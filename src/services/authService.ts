@@ -7,14 +7,16 @@ import { Login } from "../types/Login";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 const JWT_EXPIRATION = process.env.JWT_EXPIRATION;
+const JWT_SECRET_REFRESH = process.env.JWT_SECRET_REFRESH
 
-if (!JWT_SECRET || !JWT_EXPIRATION) {
+if (!JWT_SECRET || !JWT_EXPIRATION || !JWT_SECRET_REFRESH) {
     throw new Error('JWT_SECRET ou JWT_EXPIRATION manquant');
 }
 
+const userRepository = AppDataSource.getRepository(User);
+
 
 export const register = async (credentials: Register) => {
-    const userRepository = AppDataSource.getRepository(User);
 
     const existingUser = await userRepository.findOne({ where: {email: credentials.email}});
     
@@ -37,7 +39,6 @@ export const register = async (credentials: Register) => {
 }
 
 export const login = async (credentials: Login) => {
-    const userRepository = AppDataSource.getRepository(User);
     const user = await userRepository.findOne({where: {email: credentials.email}});
 
     if (!user) {
@@ -49,15 +50,26 @@ export const login = async (credentials: Login) => {
         throw new Error('Identifiants invalides');
     }
 
-    const token = jwt.sign({email: user.email, role: user.role}, JWT_SECRET, { expiresIn: '1h' });
+    const token = await generateToken(user)
+    const refreshToken = await generateRefreshToken(user)
 
     
-    return{ token }
+    return{ token, refreshToken }
+}
 
+export const generateToken = async (user: User): Promise<string> => {
+    const token = jwt.sign({email: user.email, role: user.role}, JWT_SECRET, { expiresIn: '1h' });
 
+    return token;
+}
 
+export const generateRefreshToken = async (user: User): Promise<string> => {
 
+    const refreshToken = jwt.sign({email: user.email, role: user.role}, JWT_SECRET_REFRESH, { expiresIn: '3h' });
 
+    user.refreshToken = refreshToken;
+    await userRepository.save(user)
 
+    return refreshToken;
 
 }
