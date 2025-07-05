@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { TypeExerciceEquipment } from "./TypeExerciceEquipment";
 
 @Entity()
 export class Equipment {
@@ -11,4 +12,7 @@ export class Equipment {
 
     @Column({nullable: true})
     description?: string
+
+    @OneToMany(() => TypeExerciceEquipment, typeExrciceEquipment => typeExrciceEquipment.equipment)
+    typeExerciceEquipments!: TypeExerciceEquipment[] 
 }

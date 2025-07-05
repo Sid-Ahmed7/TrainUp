@@ -26,6 +26,13 @@ export const getTypeExerciceEquipment = () => {
     return typeExerciceEquipmentRepository.find({relations: ["exercice", "equipment"]})
 }
 
+export const getEquipmentForExercice = async (exerciceId: number) => {
+  const equipmentOfExercice = await typeExerciceEquipmentRepository.find({where: {exercice: {id: exerciceId}},
+  relations: ['equipment']
+  })
+  return equipmentOfExercice.map((eq) => eq.equipment)
+} 
+
 export const deleteByEquipmentID = async (equipmentId: number) => {
   const res = await typeExerciceEquipmentRepository.delete({ equipment: { id: equipmentId } });
   return res.affected !== 0;

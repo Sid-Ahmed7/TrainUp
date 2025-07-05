@@ -21,6 +21,7 @@ const equipmentRepository = AppDataSource.getRepository(Equipment);
 
 export const createTypeExercice = async (dto: CreateTypeExerciceDTO) => {
 
+  
 
     const category = await categoryRepository.findOneBy({id : dto.categoryId});
     
@@ -73,26 +74,26 @@ export const createTypeExercice = async (dto: CreateTypeExerciceDTO) => {
 
 export const updateTypeExercice = async (exerciceId: number, dto: UpdateTypeExerciceDTO) => {
 
-    const exo = await typeExerciceRepository.findOne({where: {id: exerciceId}, relations: ["category", "audience", "complementaryExercice", "equipment"]});
+    const exo = await typeExerciceRepository.findOne({where: {id: exerciceId}, relations: ["category", "audience", "complementaryExercice", "equipments", "equipments.equipment"]});
     if(!exo) {return null;}
 
     const updateExercice: Partial<TypeExercice> = {}
 
-  if (dto.name !== undefined) updateExercice.name = dto.name;
-  if (dto.description !== undefined) updateExercice.description = dto.description;
-  if (dto.targetMuscles !== undefined) updateExercice.targetMuscles = dto.targetMuscles;
-  if (dto.difficultyLevel !== undefined) updateExercice.difficultyLevel = dto.difficultyLevel;
-  if (dto.environment !== undefined) updateExercice.environment = dto.environment;
-  if (dto.instructions !== undefined) updateExercice.instructions = dto.instructions;
-  if (dto.tips !== undefined) updateExercice.tips = dto.tips;
-  if (dto.imageUrl !== undefined) updateExercice.imageUrl = dto.imageUrl;
-  if (dto.usageCount !== undefined) updateExercice.usageCount = dto.usageCount;
-  if (dto.averageRating !== undefined) updateExercice.averageRating = dto.averageRating;
-  if (dto.averageSuccessRate !== undefined) updateExercice.averageSuccessRate = dto.averageSuccessRate;
-  if (dto.duration !== undefined) updateExercice.duration = dto.duration;
-  if (dto.averageCalories !== undefined) updateExercice.averageCalories = dto.averageCalories;
-  if (dto.repetitionsRecommended !== undefined) updateExercice.repetitionsRecommended = dto.repetitionsRecommended;
-  if (dto.durationPerRep !== undefined) updateExercice.durationPerRep = dto.durationPerRep;
+  if (dto.name !== undefined) {updateExercice.name = dto.name;}
+  if (dto.description !== undefined) {updateExercice.description = dto.description;}
+  if (dto.targetMuscles !== undefined) {updateExercice.targetMuscles = dto.targetMuscles;}
+  if (dto.difficultyLevel !== undefined) {updateExercice.difficultyLevel = dto.difficultyLevel;}
+  if (dto.environment !== undefined) {updateExercice.environment = dto.environment;}
+  if (dto.instructions !== undefined) {updateExercice.instructions = dto.instructions;}
+  if (dto.tips !== undefined) {updateExercice.tips = dto.tips;}
+  if (dto.imageUrl !== undefined) {updateExercice.imageUrl = dto.imageUrl;}
+  if (dto.usageCount !== undefined) {updateExercice.usageCount = dto.usageCount;}
+  if (dto.averageRating !== undefined) {updateExercice.averageRating = dto.averageRating;}
+  if (dto.averageSuccessRate !== undefined) {updateExercice.averageSuccessRate = dto.averageSuccessRate;}
+  if (dto.duration !== undefined) {updateExercice.duration = dto.duration;}
+  if (dto.averageCalories !== undefined) {updateExercice.averageCalories = dto.averageCalories;}
+  if (dto.repetitionsRecommended !== undefined) {updateExercice.repetitionsRecommended = dto.repetitionsRecommended;}
+  if (dto.durationPerRep !== undefined) {updateExercice.durationPerRep = dto.durationPerRep;}
 
 
     if(dto.categoryId !== undefined) {
@@ -121,8 +122,8 @@ export const updateTypeExercice = async (exerciceId: number, dto: UpdateTypeExer
     updateExercice.equipments = createdEquipments;
   }
 
-    const res = await typeExerciceRepository.update(exerciceId, updateExercice)
-    return res.affected !== 0;
+    const res = await typeExerciceRepository.save(updateExercice)
+    return res;
 }
 
 export const findAllTypeExercices = () => {

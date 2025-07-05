@@ -11,7 +11,7 @@ export class TypeExerciceEquipment {
     @ManyToOne(() => TypeExercice, exercice =>exercice.equipments, {onDelete: 'CASCADE'})
     exercice!: TypeExercice
 
-    @ManyToOne(() =>Equipment, {eager: true})
+    @ManyToOne(() => Equipment, equipment =>equipment.typeExerciceEquipments, {eager: true})
     equipment!: Equipment
 
 }
