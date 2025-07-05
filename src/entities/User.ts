@@ -23,7 +23,8 @@ export class User {
 
     @Column({nullable: true})
     refreshToken?: string
-
+    @Column({default:true})
+    isAccountEnabled!: boolean
     @CreateDateColumn()
     createdAt!: Date;
 
