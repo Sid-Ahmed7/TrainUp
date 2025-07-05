@@ -1,8 +1,7 @@
-import { AppDataSource } from "../app";
+import AppDataSource  from "../config/db";
 import { Equipment } from "../entities/Equipment";
 import { TypeExercice } from "../entities/TypeExercice";
 import { TypeExerciceEquipment } from "../entities/TypeExerciceEquipment";
-
 
 
 const typeExerciceEquipmentRepository = AppDataSource.getRepository(TypeExerciceEquipment)

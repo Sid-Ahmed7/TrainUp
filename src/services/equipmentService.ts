@@ -1,14 +1,14 @@
-import { AppDataSource } from "../app";
+import AppDataSource  from "../config/db";
 import { Equipment } from "../entities/Equipment";
+
+const equipmentRepository = AppDataSource.getRepository(Equipment);
 
 
 export const createEquipment = async (equipment: Partial<Equipment>) => {
-    const equipmentRepository = AppDataSource.getRepository(Equipment);
     return equipmentRepository.save(equipmentRepository.create(equipment));
 }
 
 export const updateEquipment = async (equipmentId: number, equipment: Partial<Equipment>) => {
-    const equipmentRepository = AppDataSource.getRepository(Equipment);
     const updatedEquipment = await equipmentRepository.findOneBy({id: equipmentId});
     if(!updatedEquipment) {
         return null;
@@ -19,17 +19,14 @@ export const updateEquipment = async (equipmentId: number, equipment: Partial<Eq
 }
 
 export const findAllEquipments = () => {
-    const equipmentRepository = AppDataSource.getRepository(Equipment);
     return equipmentRepository.find();
 }
 
 export const findEquipmentById = (equipmentId :number) => {
-    const equipmentRepository = AppDataSource.getRepository(Equipment);
     return equipmentRepository.findOneBy({id: equipmentId})
 }
 
 export const deleteEquipment = async (equipmentId: number) => {
-    const equipmentRepository = AppDataSource.getRepository(Equipment);
     const res = await equipmentRepository.delete(equipmentId);
     return res.affected !== 0;
 }

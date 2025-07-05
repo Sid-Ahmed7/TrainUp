@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { AppDataSource } from "../app";
+import AppDataSource  from "../config/db";
 import { TypeExercice } from "../entities/TypeExercice";
 import { Category } from "../entities/Category";
 import { Equipment } from "../entities/Equipment";
