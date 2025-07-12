@@ -2,14 +2,15 @@
 
 ## Description
 
-TrainUp est une application Node.js construite avec Express et TypeScript.  
+TrainUp est une application Node.js construite avec Express et TypeScript.
 
 ---
 
 ## Prérequis
 
-- Node.js 
+- Node.js
 - PostgreSQL installé et configuré
+
 ---
 
 ## Installation
@@ -20,6 +21,7 @@ TrainUp est une application Node.js construite avec Express et TypeScript.
 git clone <URL_DU_DEPOT>
 cd trainup
 ```
+
 2. Installez les dépendances
 
 ```shell
@@ -33,6 +35,7 @@ openssl rand -hex 32
 ```
 
 3. Créez un fichier .env
+
 ```shell
 DB_HOST=DB_HOST
 DB_PORT=DB_PORT
@@ -42,9 +45,14 @@ DB_NAME=DB_NAME
 PORT=PORT
 JWT_SECRET=JWT_SECRET
 JWT_SECRET_REFRESH=JWT_SECRET_REFRESH
+JWT_EXPIRATION=3600
+JWT_EXPIRATION_REFRESH=10800
 ```
 
+L'expiration du bearer et du jwt est en seconde
+
 4. Compiler et Démarrer le serveur
+
 ```shell
 npm run build && npm start
 ```
