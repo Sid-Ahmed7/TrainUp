@@ -7,7 +7,7 @@
 
 /**
  * @swagger
- * /auth/register:
+ * /api/auth/register:
  *   post:
  *     summary: Créer un nouvel utilisateur
  *     tags: [Auth]
@@ -48,7 +48,7 @@
 
 /**
  * @swagger
- * /auth/login:
+ * /api/auth/login:
  *   post:
  *     summary: Connexion utilisateur
  *     tags: [Auth]
@@ -86,7 +86,7 @@
 
 /**
  * @swagger
- * /auth/refresh-token:
+ * /api/auth/refresh-token:
  *   post:
  *     summary: Renouveler un access token avec un refresh token
  *     tags: [Auth]
