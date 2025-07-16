@@ -27,7 +27,7 @@ export const getCategory = async (req: Request, res: Response) => {
     const category = await categoryService.findCategoryById(Number(req.params.id))
     
     if(!category) {
-        return res.status(404).json({ message: "Aucune categoey trouvé" })
+        return res.status(404).json({ message: "Aucune category trouvé" })
     }
     
     res.status(200).json(category);
@@ -40,7 +40,7 @@ export const updateCategory = async (req: Request, res: Response) => {
     try {
         const updatedCategory = await categoryService.updateCategory(id, dto);
         if (!updatedCategory) {
-            return res.status(404).json({ message: "Aucune categoey trouvé"})
+            return res.status(404).json({ message: "Aucune category trouvé"})
         
         }
         return res.status(200).json(updatedCategory);
@@ -53,7 +53,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
   const deletedCategory = await categoryService.deleteCategory(id);
   if (!deletedCategory){
-    return res.status(404).json({ message: "Aucune categoey trouvé" });
+    return res.status(404).json({ message: "Aucune category trouvé" });
   }
   res.status(204).send();
 };
