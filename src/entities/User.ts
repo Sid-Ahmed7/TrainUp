@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Role } from "../enums/Role";
+import { Challenge } from "./Challenge";
 
 
 
@@ -29,6 +30,12 @@ export class User {
 
     @UpdateDateColumn()
     updatedAt!: Date;
+
+    @OneToMany(() => Challenge, challenge => challenge.creator)
+    createdChallenges!: Challenge[];
+
+    @ManyToMany(() => Challenge, challenge => challenge.participants)
+    joinedChallenges!: Challenge[];
 
 
 }

@@ -44,5 +44,6 @@ app.use('/api/target', routes.targetRoutes)
 app.use('/api/exercice', routes.typeExerciceRoutes)
 app.use('/api/equipment', routes.equipmentRoutes)
 app.use('/api/exercice-equipment', routes.typeExerciceEquipmentRoutes)
+app.use('/api/challenge', routes.challengeRoutes)
 export default app;
 export {AppDataSource}

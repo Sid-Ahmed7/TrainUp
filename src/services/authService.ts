@@ -7,7 +7,7 @@ import { Login } from "../types/Login";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 const JWT_EXPIRATION = process.env.JWT_EXPIRATION;
-const JWT_SECRET_REFRESH = process.env.JWT_SECRET_REFRESH
+const JWT_SECRET_REFRESH = process.env.JWT_SECRET_REFRESH;
 
 if (!JWT_SECRET || !JWT_EXPIRATION || !JWT_SECRET_REFRESH) {
     throw new Error('JWT_SECRET ou JWT_EXPIRATION manquant');
