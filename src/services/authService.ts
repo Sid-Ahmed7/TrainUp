@@ -58,14 +58,14 @@ export const login = async (credentials: Login) => {
 }
 
 export const generateToken = async (user: User): Promise<string> => {
-    const token = jwt.sign({email: user.email, role: user.role}, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({id: user.id, role: user.role}, JWT_SECRET, { expiresIn: '1h' });
 
     return token;
 }
 
 export const generateRefreshToken = async (user: User): Promise<string> => {
 
-    const refreshToken = jwt.sign({email: user.email, role: user.role}, JWT_SECRET_REFRESH, { expiresIn: '3h' });
+    const refreshToken = jwt.sign({id: user.id, role: user.role}, JWT_SECRET_REFRESH, { expiresIn: '3h' });
 
     user.refreshToken = refreshToken;
     await userRepository.save(user)

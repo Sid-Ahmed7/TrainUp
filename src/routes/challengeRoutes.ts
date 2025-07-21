@@ -21,6 +21,7 @@ router.delete("/:id", verifyToken, verifyRoles(Role.USER), (req, res, next) => {
     challengeController.deleteChallenge(req, res).catch(next);
 })
 
+router.get("/search", verifyToken, verifyRoles(Role.USER), challengeController.filteredChallenges)
 
 
 export default router;

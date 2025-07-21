@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Role } from "../enums/Role";
 import { Challenge } from "./Challenge";
+import { TrainingSession } from "./TrainingSession";
 
 
 
@@ -8,7 +9,7 @@ import { Challenge } from "./Challenge";
 export class User {
     
     @PrimaryGeneratedColumn()
-    id!: number;
+    id!: string;
 
     @Column()
     name!: string;
@@ -36,6 +37,9 @@ export class User {
 
     @ManyToMany(() => Challenge, challenge => challenge.participants)
     joinedChallenges!: Challenge[];
+
+    @OneToMany(() => TrainingSession, trainingSession => trainingSession.user)
+    trainingSessions!: TrainingSession[]
 
 
 }

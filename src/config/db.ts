@@ -6,6 +6,7 @@ import { Target } from '../entities/Target';
 import { Equipment } from '../entities/Equipment';
 import { TypeExercice } from '../entities/TypeExercice';
 import { TypeExerciceEquipment } from '../entities/TypeExerciceEquipment';
+import { Challenge } from '../entities/Challenge';
 config();
 
 const AppDataSource = new DataSource({
@@ -15,7 +16,7 @@ const AppDataSource = new DataSource({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : undefined,
-    entities:[User, Category, Target, Equipment, TypeExercice,TypeExerciceEquipment],
+    entities:[User, Category, Target, Equipment, TypeExercice,TypeExerciceEquipment, Challenge],
     synchronize: true,
     logging: false,
 });

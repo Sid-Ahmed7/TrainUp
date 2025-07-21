@@ -1,6 +1,8 @@
+import { Role } from "../enums/Role";
+
 export interface JWT {
-    email:string;
-    role: string;
+    id:string;
+    role: Role;
     iat?:number;
     exp?: number;
 }
