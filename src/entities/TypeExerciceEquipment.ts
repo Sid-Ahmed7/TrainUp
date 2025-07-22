@@ -1,17 +1,27 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { TypeExercice } from "./TypeExercice";
 import { Equipment } from "./Equipment";
+import { TrainingRoom } from "./TrainingRoom";
 
 @Entity()
 export class TypeExerciceEquipment {
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @PrimaryGeneratedColumn()
-    id!: number
+  @ManyToOne(() => TypeExercice, (exercice) => exercice.equipments, {
+    onDelete: "CASCADE",
+  })
+  exercice!: TypeExercice;
 
-    @ManyToOne(() => TypeExercice, exercice =>exercice.equipments, {onDelete: 'CASCADE'})
-    exercice!: TypeExercice
+  @ManyToOne(() => Equipment, (equipment) => equipment.typeExerciceEquipments, {
+    eager: true,
+  })
+  equipment!: Equipment;
 
-    @ManyToOne(() => Equipment, equipment =>equipment.typeExerciceEquipments, {eager: true})
-    equipment!: Equipment
-
+  @ManyToOne(
+    () => TrainingRoom,
+    (trainingRoom) => trainingRoom.typeExerciceEquipments,
+    { onDelete: "CASCADE" }
+  )
+  trainingRoom!: TrainingRoom;
 }
