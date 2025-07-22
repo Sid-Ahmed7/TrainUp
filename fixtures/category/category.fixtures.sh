@@ -35,7 +35,7 @@ categories=(
   '{"name": "Stretching"}'
   '{"name": "Cyclisme"}'
   '{"name": "Natation"}'
-  '{"name": "Course à pied"}'
+  '{"name": "Course a pied"}'
 )
 
 url="http://localhost:3000/api/categorie/new"

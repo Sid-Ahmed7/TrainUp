@@ -1,4 +1,6 @@
 #!/bin/bash
+export LANG="fr_FR.UTF-8"
+export LC_ALL="fr_FR.UTF-8"
 
 ENV_PATH="$(dirname "$0")/../../.env"
 if [ -f "$ENV_PATH" ]; then
@@ -26,21 +28,20 @@ fi
 echo "Admin token: $ADMIN_TOKEN"
 
 equipments=(
-  '{"name": "Haltères", "description": "Poids libres utilisés pour la musculation.", "category": "Musculation"}'
-  '{"name": "Tapis de yoga", "description": "Tapis antidérapant utilisé pour le yoga.", "category": "Yoga"}'
-  '{"name": "Vélo d'\''appartement", "description": "Machine de cardio utilisée pour simuler le cyclisme.", "category": "Cyclisme"}'
-  '{"name": "Corde à sauter", "description": "Équipement de cardio utilisé pour améliorer l'\''endurance.", "category": "Cardio"}'
-  '{"name": "Bande de résistance", "description": "Bandes élastiques utilisées pour ajouter de la résistance.", "category": "Musculation"}'
-  '{"name": "Ballon de stabilité", "description": "Ballon utilisé pour améliorer l'\''équilibre.", "category": "Pilates"}'
+  '{"name": "Halteres", "description": "Poids libres utilises pour la musculation.", "category": "Musculation"}'
+  '{"name": "Tapis de yoga", "description": "Tapis antiderapant utilise pour le yoga.", "category": "Yoga"}'
+  '{"name": "Velo d'\''appartement", "description": "Machine de cardio utilisee pour simuler le cyclisme.", "category": "Cyclisme"}'
+  '{"name": "Corde a sauter", "description": "Equipement de cardio utilise pour ameliorer l'\''endurance.", "category": "Cardio"}'
+  '{"name": "Bande de resistance", "description": "Bandes elastiques utilisees pour ajouter de la resistance.", "category": "Musculation"}'
+  '{"name": "Ballon de stabilite", "description": "Ballon utilise pour ameliorer l'\''equilibre.", "category": "Pilates"}'
   '{"name": "Rameur", "description": "Machine de cardio qui simule l'\''action de la rame.", "category": "Cardio"}'
-  '{"name": "Barre de traction", "description": "Équipement utilisé pour les exercices de traction.", "category": "Musculation"}'
-  '{"name": "Stepper", "description": "Machine de cardio qui simule la montée des escaliers.", "category": "Cardio"}'
-  '{"name": "Rouleau de mousse", "description": "Utilisé pour les exercices de récupération.", "category": "Stretching"}'
+  '{"name": "Barre de traction", "description": "Equipement utilise pour les exercices de traction.", "category": "Musculation"}'
+  '{"name": "Stepper", "description": "Machine de cardio qui simule la montee des escaliers.", "category": "Cardio"}'
+  '{"name": "Rouleau de mousse", "description": "Utilise pour les exercices de recuperation.", "category": "Stretching"}'
 )
 
 url="http://localhost:3000/api/equipment/new"
 
 for equipment in "${equipments[@]}"; do
-  curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $ADMIN_TOKEN" -d "$equipment" "$url"
-  echo
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $ADMIN_TOKEN" --data-binary "$equipment" "$url"
 done
