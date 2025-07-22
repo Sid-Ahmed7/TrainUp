@@ -8,7 +8,7 @@ const router = express.Router();
 
 // Création d'une salle (OWNER et SUPER_ADMIN)
 router.post(
-  "/",
+  "/new",
   verifyToken,
   verifyRoles(Role.OWNER, Role.SUPER_ADMIN),
   (req, res, next) => {
