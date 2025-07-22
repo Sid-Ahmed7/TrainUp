@@ -2,14 +2,16 @@ import { plainToClass } from "class-transformer";
 import { Request, Response } from "express";
 import { CreateChallengeDTO } from "../DTO/Challenge/createChallenge.dto";
 import { UpdateChallengeDTO } from "../DTO/Challenge/updateChallenge.dto";
-import * as challengeService from "../services/challenge.service";
+import {ChallengeService} from "../services/challenge.service";
 import { DifficultyLevel } from "../enums/DifficultyLevel";
 
-export const createChallenge = async (req: Request, res: Response) => {
+export class ChallengeController {
+
+static async createChallenge(req: Request, res: Response) {
     const dto = plainToClass(CreateChallengeDTO, req.body);
 
     try {
-        const challenge = await challengeService.createChallenge(dto);
+        const challenge = await ChallengeService.createChallenge(dto);
         res.status(201).json(challenge);
 
     } catch(error: any) {
@@ -17,13 +19,13 @@ export const createChallenge = async (req: Request, res: Response) => {
     }
 }
 
-export const getAllChallenge = async (req: Request, res: Response) => {
-    const challenges = await challengeService.findAllChallenges();
+static async getAllChallenge(req: Request, res: Response) {
+    const challenges = await ChallengeService.findAllChallenges();
     res.status(200).json(challenges);
 }
 
-export const getChallenge = async (req: Request, res: Response) => {
-    const challenge = await challengeService.findChallengeId(parseInt(req.params.id as string))
+static async getChallenge(req: Request, res: Response) {
+    const challenge = await ChallengeService.findChallengeId(parseInt(req.params.id as string))
     
     if(!challenge) {
         return res.status(200).json({ message: "Aucun challenge trouvé" })
@@ -33,12 +35,12 @@ export const getChallenge = async (req: Request, res: Response) => {
 }
 
 
-export const updateChallenge = async (req: Request, res: Response) => {
+static async updateChallenge(req: Request, res: Response) {
     const dto = plainToClass(UpdateChallengeDTO, req.body);
     const id = parseInt(req.params.id as string)
     const currentUserId = req.user.id;
     try {
-        const updatedChallenge = await challengeService.updateChallenge(id, dto, currentUserId);
+        const updatedChallenge = await ChallengeService.updateChallenge(id, dto, currentUserId);
         if (!updatedChallenge) {
             return res.status(200).json({ message: "Aucun challenge trouvé"})
         
@@ -49,18 +51,18 @@ export const updateChallenge = async (req: Request, res: Response) => {
     }
 }
 
-export const deleteChallenge = async (req: Request, res: Response) => {
+static async deleteChallenge (req: Request, res: Response) {
   const id = parseInt(req.params.id as string);
   const currentUserId = req.user.id;
 
-  const deletedChallenge = await challengeService.deleteChallenge(id,currentUserId);
+  const deletedChallenge = await ChallengeService.deleteChallenge(id,currentUserId);
   if (deletedChallenge.affected === 0){
     return res.status(200).json({ message: "Aucun challenge trouvé" });
   }
   res.status(204).send();
 };
 
-export const filteredChallenges = async(req: Request, res: Response) => {
+static async filteredChallenges(req: Request, res: Response) {
     try {
         const difficulty: DifficultyLevel | undefined = req.query.difficulty as DifficultyLevel
         const duration: number | undefined= req.query.duration ? parseInt(req.query.duration as string) : undefined;
@@ -70,7 +72,7 @@ export const filteredChallenges = async(req: Request, res: Response) => {
             res.status(400).json({ message: "La durée doit être un nombre positif" });
             return
         }
-        const challenges = await challengeService.filterChallenges(difficulty, duration,typeExerciceNames);
+        const challenges = await ChallengeService.filterChallenges(difficulty, duration,typeExerciceNames);
         console.log(challenges)
         if(challenges.length === 0) {
             res.status(200).json({ message: "Aucun challenge trouvé", data: [] });
@@ -86,3 +88,5 @@ export const filteredChallenges = async(req: Request, res: Response) => {
 }
 
 
+
+}

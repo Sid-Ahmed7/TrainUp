@@ -1,39 +1,44 @@
 import AppDataSource  from "../config/db";
+import { CreateCategoryDTO } from "../DTO/Category/createCategory.dto";
+import { UpdateCategoryDTO } from "../DTO/Category/updateCategory.dto";
 import { Category } from "../entities/Category";
 
-    const categoryRepository = AppDataSource.getRepository(Category);
+const categoryRepository = AppDataSource.getRepository(Category);
+export class CategoryService {
+    static async createCategory(dto: CreateCategoryDTO) {
+        const category = categoryRepository.create({ name: dto.name });
+        return await categoryRepository.save(category);
+    }
 
-
-
-export const createCategory = async (category: Partial<Category>) => {
-
-    return categoryRepository.save(categoryRepository.create(category))
-}
-
-export const updateCategory = async (categoryId: number, category: Partial<Category>) => {
+    static async updateCategory(categoryId: number, dto: UpdateCategoryDTO)  {
     const updatedCategory = await categoryRepository.findOneBy({id: categoryId })
     if(!updatedCategory) {
-        return 
+        throw new Error(`Catégorie avec l'ID ${categoryId} introuvable.`);
     }
-       const res = await categoryRepository.update(categoryId,category)
+    const res = await categoryRepository.update(categoryId,dto)
+    return res;
 
-      return res;
+    }   
 
-}   
 
-export const findAllCategories = () => {
+    static async findAllCategories()  {
+            return categoryRepository.find()
+    }
 
-    return categoryRepository.find()
+    static async findCategoryById(categoryId: number){
+      const category = await categoryRepository.findOneBy({ id: categoryId });
+      if (!category) {
+        throw new Error(`Catégorie avec l'ID ${categoryId} non trouvée.`);
+      }
+      return category;
+    }
+
+  static async deleteCategory(categoryId: number) {
+    const category = await categoryRepository.findOneBy({ id: categoryId });
+    if (!category) {
+      throw new Error(`Catégorie avec l'ID ${categoryId} non trouvée.`);
+    } 
+    const result = await categoryRepository.delete(categoryId);
+    return result.affected !== 0;
+  }
 }
-
-export const findCategoryById = (categoryId: number) => {
-
-    return categoryRepository.findOneBy({ id: categoryId })
-}
-
-export const deleteCategory = async (categoryId: number) => {
-
-    const res = await categoryRepository.delete(categoryId);
-    return res.affected !== 0;
-}   
-
