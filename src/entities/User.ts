@@ -1,45 +1,48 @@
-import { Column, CreateDateColumn, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { Role } from "../enums/Role";
 import { Challenge } from "./Challenge";
 import { TrainingSession } from "./TrainingSession";
 
-
-
 @Entity()
 export class User {
-    
-@PrimaryGeneratedColumn("uuid")
-    id!: string;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
-    @Column()
-    name!: string;
+  @Column()
+  name!: string;
 
-    @Column({unique: true})
-    email!: string;
+  @Column({ unique: true })
+  email!: string;
 
-    @Column()
-    password!: string;
+  @Column()
+  password!: string;
 
-    @Column({type: 'enum', enum: Role, default: Role.USER})
-    role!: Role
+  @Column({ type: "enum", enum: Role, default: Role.USER })
+  role!: Role;
 
-    @Column({nullable: true})
-    refreshToken?: string
+  @Column({ nullable: true })
+  refreshToken?: string;
 
-    @CreateDateColumn()
-    createdAt!: Date;
+  @CreateDateColumn()
+  createdAt!: Date;
 
-    @UpdateDateColumn()
-    updatedAt!: Date;
+  @UpdateDateColumn()
+  updatedAt!: Date;
 
-    @OneToMany(() => Challenge, challenge => challenge.creator)
-    createdChallenges!: Challenge[];
+  @OneToMany(() => Challenge, (challenge) => challenge.creator)
+  createdChallenges!: Challenge[];
 
-    @ManyToMany(() => Challenge, challenge => challenge.participants)
-    joinedChallenges!: Challenge[];
+  @ManyToMany(() => Challenge, (challenge) => challenge.participants)
+  joinedChallenges!: Challenge[];
 
-    @OneToMany(() => TrainingSession, trainingSession => trainingSession.user)
-    trainingSessions!: TrainingSession[]
-
-
+  @OneToMany(() => TrainingSession, (trainingSession) => trainingSession.user)
+  trainingSessions!: TrainingSession[];
 }
