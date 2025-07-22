@@ -1,5 +1,5 @@
 import authRoutes from "./auth.routes";
-import categoryRoutes from "./categoryRoutes";
+import categoryRoutes from "./category.routes";
 import targetRoutes from "./target.routes";
 import typeExerciceRoutes from "./typeExercice.routes";
 import equipmentRoutes from "./equipment.routes";

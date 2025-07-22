@@ -30,8 +30,8 @@ const AppDataSource = new DataSource({
     TrainingRoom,
   ],
   synchronize: true,
-  logging: ["query", "error"],
-  logger: "advanced-console",
+  /*logging: ["query", "error"],
+  logger: "advanced-console",*/
 });
 
 export default AppDataSource;

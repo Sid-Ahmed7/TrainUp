@@ -1,9 +1,9 @@
 import AppDataSource from "../config/db";
 import { TrainingRoom, RoomStatus } from "../entities/TrainingRoom";
-import { CreateTrainingRoomDTO } from "../DTO/TrainingRoom/CreateTrainingRoomDTO";
-import { UpdateTrainingRoomDTO } from "../DTO/TrainingRoom/UpdateTrainingRoomDTO";
+import { CreateTrainingRoomDTO } from "../DTO/TrainingRoom/CreateTrainingRoom.dto";
+import { UpdateTrainingRoomDTO } from "../DTO/TrainingRoom/UpdateTrainingRoom.dto";
 import { User } from "../entities/User";
-import { UpdateTrainingRoomOutDTO } from "../DTO/TrainingRoom/UpdateTrainingRoomOutDTO";
+import { UpdateTrainingRoomOutDTO } from "../DTO/TrainingRoom/UpdateTrainingRoomOut.dto";
 const trainingRoomRepository = AppDataSource.getRepository(TrainingRoom);
 const userRepository = AppDataSource.getRepository(User);
 
@@ -18,7 +18,7 @@ export const createTrainingRoom = async (
 
   const room = trainingRoomRepository.create({
     ...roomData,
-    ownerId: owner.id,
+    owner: owner,
     status: RoomStatus.PENDING,
   });
 

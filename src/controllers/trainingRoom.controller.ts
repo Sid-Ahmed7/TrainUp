@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as trainingRoomService from "../services/TrainingRoomService";
+import * as trainingRoomService from "../services/TrainingRoom.service";
 import { RoomStatus } from "../entities/TrainingRoom";
 
 export const createRoom = async (req: Request, res: Response) => {
