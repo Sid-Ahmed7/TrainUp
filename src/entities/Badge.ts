@@ -14,6 +14,12 @@ export class Badge {
     @Column({ default: 0 })
     points!: number;
 
+    @Column({ nullable: true })
+    ruleType?: string; 
+
+    @Column({ default: 0 })
+    ruleValue!: number;
+
     @Column({ default: true })
     isActive!: boolean;
 

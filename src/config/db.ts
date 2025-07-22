@@ -8,6 +8,7 @@ import { TypeExercice } from "../entities/TypeExercice";
 import { TypeExerciceEquipment } from "../entities/TypeExerciceEquipment";
 import { TrainingRoom } from "../entities/TrainingRoom";
 import { Badge } from "../entities/Badge";
+import { UserBadge } from "../entities/UserBadge";
 import { Challenge } from "../entities/Challenge";
 import { TrainingSession } from "../entities/TrainingSession";
 config();
@@ -30,6 +31,7 @@ const AppDataSource = new DataSource({
     TrainingSession,
     TrainingRoom,
     Badge,
+    UserBadge,
   ],
   synchronize: true,
   /*logging: ["query", "error"],

@@ -11,5 +11,11 @@ export class CreateBadgeDTO {
     points?: number;
 
     @Expose()
+    ruleType?: string;
+
+    @Expose()
+    ruleValue?: number;
+
+    @Expose()
     isActive?: boolean;
 } 

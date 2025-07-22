@@ -4,6 +4,7 @@ import { Challenge } from "../entities/Challenge";
 import AppDataSource from "../config/db"
 import { CreateTrainingSessionDTO } from "../DTO/TrainingSession/createSession.dto";
 import { UpdateTrainingSessionDTO } from "../DTO/TrainingSession/update.session";
+import { BadgeService } from "./badge.service";
 
 const trainingSessionRepository = AppDataSource.getRepository(TrainingSession)
 const userRepository = AppDataSource.getRepository(User)
@@ -31,7 +32,17 @@ const challengeRepository = AppDataSource.getRepository(Challenge)
             duration: dto.duration
         })
 
-        return trainingSessionRepository.save(session)
+        const savedSession = await trainingSessionRepository.save(session)
+
+        // Vérifier automatiquement les nouveaux badges
+        try {
+            await BadgeService.checkAndAwardBadges(dto.userId);
+        } catch (error) {
+            console.log("Erreur lors de la vérification des badges:", error);
+            // Ne pas faire échouer la création de session si les badges échouent
+        }
+
+        return savedSession
     }
 
     export const findAllSessionByUser = async(userId: string) => {
