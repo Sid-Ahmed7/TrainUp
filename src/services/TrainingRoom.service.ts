@@ -91,7 +91,7 @@ const mapToUpdateOutDTO = (room: TrainingRoom): UpdateTrainingRoomOutDTO => {
     description: room.description,
     capacity: room.capacity,
     equipment: room.equipment,
-    activities: room.activities,
+    typesExercice: room.typesExercice,
     status: room.status,
     phone: room.phone,
     email: room.email,
