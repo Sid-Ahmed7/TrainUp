@@ -18,7 +18,20 @@ export class UpdateChallengeDTO {
     durationMinutes?: number;
 
     @Expose()
-    difficulty!: DifficultyLevel
+    difficulty?: DifficultyLevel
+
+    @Expose()
+    startDate?: Date
+
+    @Expose()
+    endDate?: Date
+
+    @Expose()
+    targetCalories?: number
+
+    @Expose()
+    requiredSessions?: number
+
 
     @Expose()
     exercises?: number[];

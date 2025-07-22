@@ -25,7 +25,7 @@ static async getAllChallenge(req: Request, res: Response) {
 }
 
 static async getChallenge(req: Request, res: Response) {
-    const challenge = await ChallengeService.findChallengeId(parseInt(req.params.id as string))
+    const challenge = await ChallengeService.findChallengeId(Number(req.params.id))
     
     if(!challenge) {
         return res.status(200).json({ message: "Aucun challenge trouvé" })
@@ -37,7 +37,7 @@ static async getChallenge(req: Request, res: Response) {
 
 static async updateChallenge(req: Request, res: Response) {
     const dto = plainToClass(UpdateChallengeDTO, req.body);
-    const id = parseInt(req.params.id as string)
+    const id = Number(req.params.id)
     const currentUserId = req.user.id;
     try {
         const updatedChallenge = await ChallengeService.updateChallenge(id, dto, currentUserId);
@@ -52,7 +52,7 @@ static async updateChallenge(req: Request, res: Response) {
 }
 
 static async deleteChallenge (req: Request, res: Response) {
-  const id = parseInt(req.params.id as string);
+  const id = Number(req.params.id);
   const currentUserId = req.user.id;
 
   const deletedChallenge = await ChallengeService.deleteChallenge(id,currentUserId);
@@ -65,7 +65,7 @@ static async deleteChallenge (req: Request, res: Response) {
 static async filteredChallenges(req: Request, res: Response) {
     try {
         const difficulty: DifficultyLevel | undefined = req.query.difficulty as DifficultyLevel
-        const duration: number | undefined= req.query.duration ? parseInt(req.query.duration as string) : undefined;
+        const duration: number | undefined= req.query.duration ? Number(req.query.duration) : undefined;
         const typeExerciceNames: string[] =  req.query.types ? (req.query.types as string).split(',') : [];
 
         if (duration !== undefined && duration < 0  ) {

@@ -51,7 +51,11 @@ export class ChallengeService {
         difficulty: dto.difficulty,
         exercises: typeExercises,
         creator,
-        participants
+        participants,
+        startDate: dto.startDate,
+        endDate: dto.endDate,
+        targetCalories: dto.targetCalories,
+        requiredSessions: dto.requiredSessions
     })
 
     return challengeRepository.save(challenge);
@@ -90,8 +94,11 @@ export class ChallengeService {
             }
             challenge.difficulty = dto.difficulty
         }
-        
-        
+
+        if(dto.startDate !== undefined) { challenge.startDate = new Date(dto.startDate)}
+        if(dto.endDate !== undefined) { challenge.endDate = new Date(dto.endDate)}
+        if(dto.targetCalories !== undefined) { challenge.targetCalories = dto.targetCalories}
+        if(dto.requiredSessions !== undefined) { challenge.requiredSessions = dto.requiredSessions}
         const res = await challengeRepository.save(challenge);
         return res;
     }
