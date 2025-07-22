@@ -6,8 +6,11 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  ManyToMany,
+  JoinTable,
 } from "typeorm";
 import { User } from "./User";
+import { TypeExercice } from "./TypeExercice";
 export enum RoomStatus {
   PENDING = "PENDING",
   APPROVED = "APPROVED",
@@ -34,8 +37,9 @@ export class TrainingRoom {
   @Column("text", { array: true, default: [] })
   equipment!: string[];
 
-  @Column("text", { array: true, default: [] })
-  activities!: string[];
+  @ManyToMany(() => TypeExercice, { eager: true })
+  @JoinTable()
+  typesExercice!: TypeExercice[];
 
   @Column({
     type: "enum",
