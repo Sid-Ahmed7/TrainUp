@@ -63,10 +63,10 @@ export const deleteChallenge = async (req: Request, res: Response) => {
 export const filteredChallenges = async(req: Request, res: Response) => {
     try {
         const difficulty: DifficultyLevel | undefined = req.query.difficulty as DifficultyLevel
-        const duration: number = req.query.duration ? Number(req.query.duration) : null
+        const duration: number | undefined= req.query.duration ? parseInt(req.query.duration as string) : undefined;
         const typeExerciceNames: string[] =  req.query.types ? (req.query.types as string).split(',') : [];
 
-        if (duration !== undefined) {
+        if (duration !== undefined && duration < 0  ) {
             res.status(400).json({ message: "La durée doit être un nombre positif" });
             return
         }

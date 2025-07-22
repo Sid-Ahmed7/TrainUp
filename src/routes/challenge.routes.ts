@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.post("/nouveau", verifyToken, verifyRoles(Role.USER) , challengeController.createChallenge )
 router.get("/", challengeController.getAllChallenge)
+router.get("/search", verifyToken, verifyRoles(Role.USER), challengeController.filteredChallenges)
 router.get("/:id", (req,res, next) => {
     challengeController.getChallenge(req, res).catch(next);
 })
@@ -21,7 +22,6 @@ router.delete("/:id", verifyToken, verifyRoles(Role.USER), (req, res, next) => {
     challengeController.deleteChallenge(req, res).catch(next);
 })
 
-router.get("/search", verifyToken, verifyRoles(Role.USER), challengeController.filteredChallenges)
 
 
 export default router;

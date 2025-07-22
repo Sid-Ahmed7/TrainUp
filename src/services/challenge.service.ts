@@ -142,22 +142,25 @@ export const shareChallenge = async (challengeId: number, participantsIds: numbe
 
 
 export const filterChallenges = async(difficulty?: DifficultyLevel, duration?: number, typeExerciceNames?: string[]) => {
-    const query: any = {
-        where: {},
-        relations:["exercises"],
-    }
+    let query: any = 
+        challengeRepository.createQueryBuilder("challenge")
+                           .leftJoinAndSelect("challenge.exercises", "exercise")
+                           .leftJoinAndSelect("challenge.creator", "creator")
 
     if(difficulty) {
-        query.where["difficulty"] = difficulty
+        query = query.andWhere("challenge.difficulty = :difficulty", {difficulty})
     }
-if (duration !== undefined && !isNaN(duration)) {
-    query.where["durationMinutes"] = duration;
-}
 
-    if(typeExerciceNames && typeExerciceNames.length > 0) {
-        query.where["exercises"] = { name: In(typeExerciceNames)}
+    if(duration !== undefined && !isNaN(duration)) {
+        query = query.andWhere("challenge.durationMinutes = :duration", {duration})
     }
-    const challenges = await challengeRepository.find(query)
+
+    if (typeExerciceNames && typeExerciceNames.length > 0) {
+        query = query.andWhere("exercise.name IN (:...typeExerciceNames)", { typeExerciceNames });
+    }
+
+    const challenges = await query.getMany()
     return challenges
+    
 }
 
