@@ -9,7 +9,7 @@ export interface UpdateTrainingRoomOutDTO {
   status?: RoomStatus;
   typeExerciceEquipments: {
     exerciceId: number;
-    equipmentId: number;
+    equipmentId?: number;
   }[];
   phone?: string;
   email?: string;

@@ -7,7 +7,7 @@ export interface UpdateTrainingRoomDTO {
   capacity?: number;
   typeExerciceEquipments: {
     exerciceId: number;
-    equipmentId: number;
+    equipmentId?: number;
   }[];
   phone?: string;
   email?: string;
