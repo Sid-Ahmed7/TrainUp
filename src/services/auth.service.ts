@@ -21,64 +21,65 @@ if (
 
 const userRepository = AppDataSource.getRepository(User);
 
-export const register = async (credentials: Register) => {
-  const existingUser = await userRepository.findOne({
-    where: { email: credentials.email },
-  });
+export class AuthService {
+  static async register(credentials: Register) {
+    const existingUser = await userRepository.findOne({
+      where: { email: credentials.email },
+    });
 
-  if (existingUser) {
-    throw new Error("Email déjà utilisé");
+    if (existingUser) {
+      throw new Error("Email déjà utilisé");
+    }
+
+    const hashedPassword = await bcrypt.hash(credentials.password, 10);
+
+    const user = userRepository.create({
+      name: credentials.name,
+      email: credentials.email,
+      password: hashedPassword,
+      role: credentials.role,
+    });
+
+    await userRepository.save(user);
+
+    return user;
   }
 
-  const hashedPassword = await bcrypt.hash(credentials.password, 10);
+  static async login(credentials: Login) {
+    const user = await userRepository.findOne({
+      where: { email: credentials.email },
+    });
 
-  const user = userRepository.create({
-    name: credentials.name,
-    email: credentials.email,
-    password: hashedPassword,
-    role: credentials.role,
-  });
+    if (!user) {
+      throw new Error("Identifiants invalides");
+    }
 
-  await userRepository.save(user);
+    const checkPassword = bcrypt.compareSync(
+      credentials.password,
+      user.password
+    );
+    if (!checkPassword) {
+      throw new Error("Identifiants invalides");
+    }
 
-  return user;
-};
+    const token = await this.generateToken(user);
+    const refreshToken = await this.generateRefreshToken(user);
 
-export const login = async (credentials: Login) => {
-  const user = await userRepository.findOne({
-    where: { email: credentials.email },
-  });
-
-  if (!user) {
-    throw new Error("Identifiants invalides");
+    return { token, refreshToken };
   }
 
-  const checkPassword = bcrypt.compareSync(credentials.password, user.password);
-  if (!checkPassword) {
-    throw new Error("Identifiants invalides");
+  static async generateToken(user: User){
+    const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, {expiresIn: Number(JWT_EXPIRATION),});
+    return token;
   }
 
-  const token = await generateToken(user);
-  const refreshToken = await generateRefreshToken(user);
+  static async generateRefreshToken(user: User): Promise<string> {
+    const refreshToken = jwt.sign(
+      { id: user.id, role: user.role },JWT_SECRET_REFRESH,{ expiresIn: Number(JWT_EXPIRATION_REFRESH) });
 
-  return { token, refreshToken };
-};
+    user.refreshToken = refreshToken;
+    await userRepository.save(user);
 
-export const generateToken = async (user: User): Promise<string> => {
-  const token = jwt.sign({ email: user.email, role: user.role }, JWT_SECRET, {
-    expiresIn: Number(JWT_EXPIRATION),
-  });
-  return token;
-};
-
-export const generateRefreshToken = async (user: User): Promise<string> => {
-  const refreshToken = jwt.sign(
-    { email: user.email, role: user.role },
-    JWT_SECRET_REFRESH,
-    { expiresIn: Number(JWT_EXPIRATION_REFRESH) }
-  );
-
-  user.refreshToken = refreshToken;
-  await userRepository.save(user);
-  return refreshToken;
-};
+    return refreshToken;
+  }
+}
