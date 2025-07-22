@@ -90,8 +90,10 @@ const mapToUpdateOutDTO = (room: TrainingRoom): UpdateTrainingRoomOutDTO => {
     address: room.address,
     description: room.description,
     capacity: room.capacity,
-    equipment: room.equipment,
-    typesExercice: room.typesExercice,
+    typeExerciceEquipments: room.typeExerciceEquipments?.map((e) => ({
+      exerciceId: e.exercice.id,
+      equipmentId: e.equipment?.id,
+    })),
     status: room.status,
     phone: room.phone,
     email: room.email,
