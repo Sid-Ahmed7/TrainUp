@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Charger les variables d'environnement depuis le .env à la racine du projet
 ENV_PATH="$(dirname "$0")/../../.env"
 if [ -f "$ENV_PATH" ]; then
     source "$ENV_PATH"
@@ -9,7 +8,6 @@ else
     exit 1
 fi
 
-# Vérifier que les variables sont bien définies
 if [ -z "$ADMIN_NAME" ] || [ -z "$ADMIN_EMAIL" ] || [ -z "$ADMIN_PASSWORD" ]; then
     echo "ADMIN_NAME, ADMIN_EMAIL ou ADMIN_PASSWORD manquant dans .env"
     exit 1
