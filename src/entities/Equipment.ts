@@ -3,16 +3,18 @@ import { TypeExerciceEquipment } from "./TypeExerciceEquipment";
 
 @Entity()
 export class Equipment {
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @PrimaryGeneratedColumn()
-    id!: number
+  @Column({ unique: true })
+  name!: string;
 
-    @Column({unique: true})
-    name!: string
+  @Column({ nullable: true })
+  description?: string;
 
-    @Column({nullable: true})
-    description?: string
-
-    @OneToMany(() => TypeExerciceEquipment, typeExrciceEquipment => typeExrciceEquipment.equipment)
-    typeExerciceEquipments!: TypeExerciceEquipment[] 
+  @OneToMany(
+    () => TypeExerciceEquipment,
+    (typeExerciceEquipment) => typeExerciceEquipment.equipment
+  )
+  typeExerciceEquipments!: TypeExerciceEquipment[];
 }
