@@ -13,7 +13,7 @@ export const createChallenge = async (req: Request, res: Response) => {
         res.status(201).json(challenge);
 
     } catch(error: any) {
-        res.status(500).json({message: error.message})
+        res.status(400).json({message: error.message})
     }
 }
 
@@ -23,7 +23,7 @@ export const getAllChallenge = async (req: Request, res: Response) => {
 }
 
 export const getChallenge = async (req: Request, res: Response) => {
-    const challenge = await challengeService.findChallengeId(Number(req.params.id))
+    const challenge = await challengeService.findChallengeId(parseInt(req.params.id as string))
     
     if(!challenge) {
         return res.status(200).json({ message: "Aucun challenge trouvé" })
@@ -35,7 +35,7 @@ export const getChallenge = async (req: Request, res: Response) => {
 
 export const updateChallenge = async (req: Request, res: Response) => {
     const dto = plainToClass(UpdateChallengeDTO, req.body);
-    const id = Number(req.params.id)
+    const id = parseInt(req.params.id as string)
     const currentUserId = req.user.id;
     try {
         const updatedChallenge = await challengeService.updateChallenge(id, dto, currentUserId);
@@ -45,12 +45,12 @@ export const updateChallenge = async (req: Request, res: Response) => {
         }
         return res.status(200).json(updatedChallenge);
     } catch(error: any) {
-        res.status(500).json({message: error.message})
+        res.status(400).json({message: error.message})
     }
 }
 
 export const deleteChallenge = async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
+  const id = parseInt(req.params.id as string);
   const currentUserId = req.user.id;
 
   const deletedChallenge = await challengeService.deleteChallenge(id,currentUserId);
@@ -81,7 +81,7 @@ export const filteredChallenges = async(req: Request, res: Response) => {
     } catch(error) {
                 console.error("Erreur lors du filtrage :", error);
 
-        res.status(500).json({ message: "Erreur interne du serveur" });
+        res.status(400).json({ message: "Erreur interne du serveur" });
     }
 }
 

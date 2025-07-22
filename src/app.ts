@@ -45,6 +45,7 @@ app.use('/api/exercice', routes.typeExerciceRoutes)
 app.use('/api/equipment', routes.equipmentRoutes)
 app.use('/api/exercice-equipment', routes.typeExerciceEquipmentRoutes)
 app.use('/api/challenge', routes.challengeRoutes)
+app.use('/api/session', routes.trainingSession)
 app.use((req, res, next) => {
     console.log(`\n🌐 === ${new Date().toISOString()} ===`);
     console.log(`${req.method} ${req.originalUrl}`);

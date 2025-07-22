@@ -5,6 +5,7 @@ import typeExerciceRoutes from './typeExercice.routes'
 import equipmentRoutes from './equipment.routes'
 import typeExerciceEquipmentRoutes from './typeExerciceEquipment.routes'
 import challengeRoutes from './challenge.routes'
+import trainingSession  from './trainingSession.routes';
 export {
   authRoutes,
   categoryRoutes,
@@ -12,5 +13,6 @@ export {
   typeExerciceRoutes,
   equipmentRoutes,
   typeExerciceEquipmentRoutes,
-  challengeRoutes
+  challengeRoutes,
+  trainingSession
 };

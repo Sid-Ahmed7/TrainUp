@@ -13,7 +13,7 @@ export class TrainingSession {
     @ManyToOne(() => User,  user => user.trainingSessions)
     user!: User
 
-    @Column()
+    @Column({ type: 'timestamp' })
     startDate!: Date
     
     @Column('float')
