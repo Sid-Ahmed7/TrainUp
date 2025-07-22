@@ -12,9 +12,10 @@ export class TypeExerciceEquipment {
     onDelete: "CASCADE",
   })
   exercice!: TypeExercice;
-
+  // nullable car on peut avoir un exercice sans équipement
   @ManyToOne(() => Equipment, (equipment) => equipment.typeExerciceEquipments, {
     eager: true,
+    nullable: true,
   })
   equipment!: Equipment;
 
