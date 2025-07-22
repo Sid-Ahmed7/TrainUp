@@ -56,9 +56,6 @@ export class TrainingRoom {
   @JoinColumn({ name: "ownerId" })
   owner!: User;
 
-  @Column()
-  ownerId!: number;
-
   @CreateDateColumn()
   createdAt!: Date;
 

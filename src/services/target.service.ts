@@ -3,6 +3,15 @@ import { Target } from "../entities/Target";
 
 const targetRepository = AppDataSource.getRepository(Target);
 
+export class TargetService {
+
+
+
+
+
+
+    
+}
 export const createTarget = async (target: Partial<Target>) => {
 
     return targetRepository.save(targetRepository.create(target))

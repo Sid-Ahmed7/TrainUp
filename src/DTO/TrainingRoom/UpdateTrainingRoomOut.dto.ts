@@ -1,5 +1,5 @@
 import { RoomStatus } from "../../entities/TrainingRoom";
-import { TypeExercice } from "../../entities/TypeExercice";
+import { User } from "../../entities/User";
 export interface UpdateTrainingRoomOutDTO {
   id: number;
   name?: string;
@@ -14,7 +14,7 @@ export interface UpdateTrainingRoomOutDTO {
   phone?: string;
   email?: string;
   website?: string;
-  ownerId?: number;
+  owner?: User;
   createdAt?: Date;
   updatedAt?: Date;
 }

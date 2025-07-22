@@ -1,5 +1,5 @@
 import express from "express";
-import * as targetController from "../controllers/target.controller";
+import {TargetController} from "../controllers/target.controller";
 import { verifyRoles } from "../middlewares/verifyRoles";
 import { verifyToken } from "../middlewares/auth";
 
@@ -7,20 +7,20 @@ import { Role } from "../enums/Role";
 
 const router = express.Router()
 
-router.post("/nouvelle",verifyToken,verifyRoles(Role.SUPER_ADMIN),targetController.createTarget)
+router.post("/nouvelle",verifyToken,verifyRoles(Role.SUPER_ADMIN),TargetController.createTarget)
 
-router.get("/",targetController.getAllTargets)
+router.get("/",TargetController.getAllTargets)
 
 router.get("/:id", (req, res, next) => {
-    targetController.getTarget(req, res).catch(next);
+    TargetController.getTarget(req, res).catch(next);
 });
 
 router.put("/:id",verifyToken, verifyRoles(Role.SUPER_ADMIN), (req, res, next) => {
-    targetController.updateTarget(req, res).catch(next);
+    TargetController.updateTarget(req, res).catch(next);
 });
 
 router.delete("/:id",verifyToken, verifyRoles(Role.SUPER_ADMIN), (req, res, next) => {
-    targetController.deleteTarget(req, res).catch(next);
+    TargetController.deleteTarget(req, res).catch(next);
 });
 
 

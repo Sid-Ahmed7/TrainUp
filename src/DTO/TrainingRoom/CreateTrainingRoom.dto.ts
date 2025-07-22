@@ -1,4 +1,3 @@
-import { TypeExercice } from "../../entities/TypeExercice";
 
 export interface CreateTrainingRoomDTO {
   name: string;
