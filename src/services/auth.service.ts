@@ -9,7 +9,8 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 const JWT_EXPIRATION = process.env.JWT_EXPIRATION;
 const JWT_SECRET_REFRESH = process.env.JWT_SECRET_REFRESH;
 const JWT_EXPIRATION_REFRESH = process.env.JWT_EXPIRATION_REFRESH;
-if (!JWT_SECRET || !JWT_EXPIRATION || !JWT_SECRET_REFRESH) {
+
+if (!JWT_SECRET || !JWT_EXPIRATION || !JWT_SECRET_REFRESH || !JWT_EXPIRATION_REFRESH) {
   throw new Error("JWT_SECRET ou JWT_EXPIRATION manquant");
 }
 
@@ -62,7 +63,6 @@ export const generateToken = async (user: User): Promise<string> => {
   const token = jwt.sign({ email: user.email, role: user.role }, JWT_SECRET, {
     expiresIn: Number(JWT_EXPIRATION),
   });
-
   return token;
 };
 
@@ -75,6 +75,5 @@ export const generateRefreshToken = async (user: User): Promise<string> => {
 
   user.refreshToken = refreshToken;
   await userRepository.save(user);
-
   return refreshToken;
 };

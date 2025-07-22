@@ -1,7 +1,7 @@
-import express from "express";
-import { config } from "dotenv";
-import swaggerJsdoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
+import express, {Request, Response} from 'express';
+import {config} from 'dotenv';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 import cors from "cors";
 import * as routes from "./routes/index";
@@ -35,17 +35,23 @@ const swaggerOptions = {
 app.use(express.json());
 app.use(cors(corsOptions));
 const specs = swaggerJsdoc(swaggerOptions);
-app.use(
-  "/api-docs",
-  swaggerUi.serve,
-  swaggerUi.setup(specs, { explorer: true })
-);
-app.use("/api/auth", routes.authRoutes);
-app.use("/api/categorie", routes.categoryRoutes);
-app.use("/api/target", routes.targetRoutes);
-app.use("/api/exercice", routes.typeExerciceRoutes);
-app.use("/api/equipment", routes.equipmentRoutes);
-app.use("/api/exercice-equipment", routes.typeExerciceEquipmentRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
+app.use('/api/auth', routes.authRoutes);
+app.use('/api/categorie', routes.categoryRoutes);
+app.use('/api/target', routes.targetRoutes)
+app.use('/api/exercice', routes.typeExerciceRoutes)
+app.use('/api/equipment', routes.equipmentRoutes)
 app.use("/api/training-rooms", routes.TraniningRoomRoutes);
+app.use('/api/exercice-equipment', routes.typeExerciceEquipmentRoutes)
+app.use('/api/challenge', routes.challengeRoutes)
+app.use('/api/session', routes.trainingSession)
+app.use((req, res, next) => {
+    console.log(`\n🌐 === ${new Date().toISOString()} ===`);
+    console.log(`${req.method} ${req.originalUrl}`);
+    console.log('Headers:', req.headers.authorization ? 'TOKEN PRÉSENT' : 'PAS DE TOKEN');
+    console.log('Query:', req.query);
+    console.log('Params:', req.params);
+    next();
+});
 export default app;
 export { AppDataSource };

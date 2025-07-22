@@ -7,7 +7,8 @@ import { Equipment } from "../entities/Equipment";
 import { TypeExercice } from "../entities/TypeExercice";
 import { TypeExerciceEquipment } from "../entities/TypeExerciceEquipment";
 import { TrainingRoom } from "../entities/TrainingRoom";
-
+import { Challenge } from "../entities/Challenge";
+import { TrainingSession } from "../entities/TrainingSession";
 config();
 
 const AppDataSource = new DataSource({
@@ -24,10 +25,13 @@ const AppDataSource = new DataSource({
     Equipment,
     TypeExercice,
     TypeExerciceEquipment,
+    Challenge,
+    TrainingSession,
     TrainingRoom,
   ],
   synchronize: true,
-  logging: false,
+  logging: ["query", "error"],
+  logger: "advanced-console",
 });
 
 export default AppDataSource;

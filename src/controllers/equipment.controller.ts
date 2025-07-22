@@ -1,9 +1,8 @@
 import { plainToClass } from "class-transformer";
 import { Request, Response } from "express";
-import * as equipmentService from "../services/equipmentService";
-import { CreateEquipmentDTO } from "../DTO/Equipment/CreateEquipmentDTO";
-import { UpdateEquipmentDTO } from "../DTO/Equipment/UpdateEquipmentDTO";
-
+import * as equipmentService from "../services/equipment.service";
+import { CreateEquipmentDTO  } from "../DTO/Equipment/createEquipment.dto";
+import { UpdateEquipmentDTO } from "../DTO/Equipment/updateEquipment.dto";
 
 
 export const createEquipment = async (req: Request, res: Response) => {

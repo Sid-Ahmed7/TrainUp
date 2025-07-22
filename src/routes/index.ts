@@ -1,16 +1,20 @@
-import authRoutes from "./authRoutes";
+import authRoutes from "./auth.routes";
 import categoryRoutes from "./categoryRoutes";
-import targetRoutes from "./targetRoutes";
-import typeExerciceRoutes from "./typeExerciceRoutes";
-import equipmentRoutes from "./equipmentRoutes";
-import typeExerciceEquipmentRoutes from "./typeExerciceEquipmentRoutes";
+import targetRoutes from "./target.routes";
+import typeExerciceRoutes from "./typeExercice.routes";
+import equipmentRoutes from "./equipment.routes";
+import typeExerciceEquipmentRoutes from "./typeExerciceEquipment.routes";
 import TraniningRoomRoutes from "./TrainingRoomRoutes";
+import challengeRoutes from "./challenge.routes";
+import trainingSession from "./trainingSession.routes";
 export {
   authRoutes,
   categoryRoutes,
   targetRoutes,
   typeExerciceRoutes,
   equipmentRoutes,
-  TraniningRoomRoutes,
   typeExerciceEquipmentRoutes,
+  challengeRoutes,
+  trainingSession,
+  TraniningRoomRoutes,
 };

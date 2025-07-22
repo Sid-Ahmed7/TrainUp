@@ -1,7 +1,7 @@
 import express from "express"
-import * as typeExerciceController from "../controllers/typeExerciceController";
+import * as typeExerciceController from "../controllers/typeExercice.controller";
 import { verifyRoles } from "../middlewares/verifyRoles";
-import { verifyToken } from "../middlewares/authMiddleware";
+import { verifyToken } from "../middlewares/auth";
 
 import { Role } from "../enums/Role";
 

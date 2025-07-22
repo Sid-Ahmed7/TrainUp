@@ -1,36 +1,37 @@
 import { Expose, Type } from "class-transformer";
 import { DifficultyLevel } from "../../enums/DifficultyLevel";
 import { Environment } from "../../enums/Environment";
-import { CreateTypeExerciceEquipmentDTO } from "../TypeExerciceEquipment/CreateTypeExerciceEquipmentDTO";
+import { CreateTypeExerciceEquipmentDTO } from "../TypeExerciceEquipment/createTypeExerciceEquipment.dto";
 
-export class UpdateTypeExerciceDTO {
+
+export class CreateTypeExerciceDTO {
   @Expose()
-  name?: string;
-
-  @Expose() 
-  description?: string;
+  name!: string;
 
   @Expose()
-  targetMuscles?: string[];
+  description!: string;
 
   @Expose()
-  categoryId?: number;
+  targetMuscles!: string[];
 
   @Expose()
-  difficultyLevel?: DifficultyLevel;
+  categoryId!: number;
+
+  @Expose()
+  difficultyLevel!: DifficultyLevel;
 
   @Expose()
   @Type(() => CreateTypeExerciceEquipmentDTO)
-  equipments?: CreateTypeExerciceEquipmentDTO[];
+  equipments!: CreateTypeExerciceEquipmentDTO[];
 
   @Expose()
-  environment?: Environment;
+  environment!: Environment;
 
   @Expose()
-  instructions?: string;
+  instructions!: string;
 
   @Expose()
-  tips?: string;
+  tips!: string;
 
   @Expose()
   imageUrl?: string;
@@ -39,7 +40,7 @@ export class UpdateTypeExerciceDTO {
   complementaryExerciceIds?: number[];
 
   @Expose()
-  audienceIds?: number[];
+  audienceIds!: number[];
 
   @Expose()
   usageCount?: number;
@@ -60,6 +61,5 @@ export class UpdateTypeExerciceDTO {
   repetitionsRecommended?: number;
 
   @Expose()
-  durationPerRep?: number; 
-   
+  durationPerRep?: number;
 }

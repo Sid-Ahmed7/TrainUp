@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import * as authService from '../services/authService';
+import * as authService from '../services/auth.service';
 import { Register } from "../types/Register";
 import { Login } from "../types/Login";
 import AppDataSource from "../config/db";
 import { User } from "../entities/User";
-import { generateRefreshToken, generateToken } from "../services/authService";
+import { generateRefreshToken, generateToken } from "../services/auth.service";
 
 const userRepository = AppDataSource.getRepository(User);
 

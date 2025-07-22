@@ -4,6 +4,7 @@ import { DifficultyLevel } from "../enums/DifficultyLevel";
 import { TypeExerciceEquipment } from "./TypeExerciceEquipment";
 import { Environment } from "../enums/Environment";
 import { Target } from "./Target";
+import { Challenge } from "./Challenge";
 @Entity()
 export class TypeExercice {
 
@@ -48,6 +49,10 @@ export class TypeExercice {
     @ManyToMany(() => Target,{eager: true})
     @JoinTable()
     audience!: Target[]
+
+    @ManyToMany(() => Challenge, challenge => challenge.exercises)
+    challenges!: Challenge[];
+
 
     @Column({ default: 0})
     usageCount!: number;

@@ -6,9 +6,9 @@ import { Equipment } from "../entities/Equipment";
 import { TypeExerciceEquipment } from "../entities/TypeExerciceEquipment";
 import { Target } from "../entities/Target";
 import { In } from "typeorm";
-import * as typeExerciceEquipmentService from "./typeExerciceEquipment";
-import { CreateTypeExerciceDTO } from "../DTO/TypeExercice/CreateTypeExerciceDTO";
-import { UpdateTypeExerciceDTO } from "../DTO/TypeExercice/UpdateTypeExerciceDTO";
+import * as typeExerciceEquipmentService from "./typeExerciceEquipment.service";
+import { CreateTypeExerciceDTO } from "../DTO/TypeExercice/createTypeExercice.dto";
+import { UpdateTypeExerciceDTO } from "../DTO/TypeExercice/updateTypeExercice.dto";
 
 
 

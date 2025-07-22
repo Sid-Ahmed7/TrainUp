@@ -1,8 +1,8 @@
 import { plainToClass } from "class-transformer"
-import { CreateTypeExerciceDTO } from "../DTO/TypeExercice/CreateTypeExerciceDTO"
-import * as typeExerciceService from "../services/typeExerciceService";
+import { CreateTypeExerciceDTO } from "../DTO/TypeExercice/createTypeExercice.dto"
+import * as typeExerciceService from "../services/typeExercice.service";
 import { Request, Response } from "express";
-import {UpdateTypeExerciceDTO} from "../DTO/TypeExercice/UpdateTypeExerciceDTO"
+import {UpdateTypeExerciceDTO} from "../DTO/TypeExercice/updateTypeExercice.dto"
 
 
 
