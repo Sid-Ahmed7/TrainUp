@@ -1,8 +1,8 @@
 import { plainToClass } from "class-transformer";
 import { Request, Response } from "express";
-import { CreateChallengeDTO } from "../DTO/Challenge/CreateChallengeDTO";
-import { UpdateChallengeDTO } from "../DTO/Challenge/UpdateChallengeDTO";
-import * as challengeService from "../services/challengeService";
+import { CreateChallengeDTO } from "../DTO/Challenge/createChallenge.dto";
+import { UpdateChallengeDTO } from "../DTO/Challenge/updateChallenge.dto";
+import * as challengeService from "../services/challenge.service";
 import { DifficultyLevel } from "../enums/DifficultyLevel";
 
 export const createChallenge = async (req: Request, res: Response) => {
@@ -63,20 +63,24 @@ export const deleteChallenge = async (req: Request, res: Response) => {
 export const filteredChallenges = async(req: Request, res: Response) => {
     try {
         const difficulty: DifficultyLevel | undefined = req.query.difficulty as DifficultyLevel
-        const duration: number | undefined = Number(req.query.duration)
+        const duration: string= req.query.duration ? req.query.duration : undefined;
         const typeExerciceNames: string[] =  req.query.types ? (req.query.types as string).split(',') : [];
 
-        if(isNaN(duration) && duration <= 0  ) {
-            res.status(400).json({message: "La durée doit être un nombre positif "})
+        if (duration !== undefined) {
+            res.status(400).json({ message: "La durée doit être un nombre positif" });
+            return
         }
         const challenges = await challengeService.filterChallenges(difficulty, duration,typeExerciceNames);
-
+        console.log(challenges)
         if(challenges.length === 0) {
             res.status(200).json({ message: "Aucun challenge trouvé", data: [] });
+            return
         }
 
         res.status(200).json({data: challenges})
     } catch(error) {
+                console.error("Erreur lors du filtrage :", error);
+
         res.status(500).json({ message: "Erreur interne du serveur" });
     }
 }

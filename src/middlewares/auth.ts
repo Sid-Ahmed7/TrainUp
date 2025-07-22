@@ -23,7 +23,7 @@ export const verifyToken = async (req: Request, res: Response, next: NextFunctio
     try {
         const decodedJwt = jwt.verify(token, JWT_SECRET) as JWT;
         const user = await userRepository.findOne({ where: { id: decodedJwt.id } });
-
+        
         if (!user) {
             res.status(404).json({ error: "Utilisateur non trouvé" });
             return;  

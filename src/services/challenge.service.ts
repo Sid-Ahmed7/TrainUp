@@ -1,6 +1,6 @@
 import AppDataSource  from "../config/db";
-import { CreateChallengeDTO } from "../DTO/Challenge/CreateChallengeDTO";
-import { UpdateChallengeDTO } from "../DTO/Challenge/UpdateChallengeDTO";
+import { CreateChallengeDTO } from "../DTO/Challenge/createChallenge.dto";
+import { UpdateChallengeDTO } from "../DTO/Challenge/updateChallenge.dto";
 import { Challenge } from "../entities/Challenge";
 import { TypeExercice } from "../entities/TypeExercice";
 import { User } from "../entities/User";
@@ -19,9 +19,20 @@ export const createChallenge = async (dto: CreateChallengeDTO) => {
         throw new Error("le créateur du challenge n'existe pas");
     }
 
-    let exercices: TypeExercice[] = [];
-    if(dto.recommendedExercises && dto.recommendedExercises.length > 0) {
-        exercices = await exerciceRepository.findBy({id : In(dto.recommendedExercises)})
+    const existingChallenge = await challengeRepository.findOne({
+        where: {
+            title: dto.title,
+            creator: {id: dto.creatorId}
+        }
+    })
+
+      if (existingChallenge) {
+        throw new Error("Un challenge avec ce titre existe déjà.");
+    }
+
+    let typeExercises: TypeExercice[] = [];
+    if(dto.exercises && dto.exercises.length > 0) {
+        typeExercises = await exerciceRepository.findBy({id : In(dto.exercises)})
     }
 
     let participants: User[] = [];
@@ -35,7 +46,8 @@ export const createChallenge = async (dto: CreateChallengeDTO) => {
         description: dto.description,
         objectives: dto.objectives,
         durationMinutes: dto.durationMinutes,
-        recommendedExercises: exercices,
+        difficulty: dto.difficulty,
+        exercises: typeExercises,
         creator,
         participants
     })
@@ -45,7 +57,7 @@ export const createChallenge = async (dto: CreateChallengeDTO) => {
 
 export const updateChallenge = async (challengeId: number, dto: UpdateChallengeDTO, currentUserId: string) => {
     const challenge = await challengeRepository.findOne({ 
-         where: {id: challengeId }, relations: ["recommendedExercises", "participants", "creator"]})    
+         where: {id: challengeId }, relations: ["exercises", "participants", "creator"]})    
     if (!challenge) {
         throw new Error("Aucun challenge trouvé");
     }
@@ -54,9 +66,9 @@ export const updateChallenge = async (challengeId: number, dto: UpdateChallengeD
         throw new Error("Vous ne pouvez pas modifié ce challenge");
     }
 
-    let exercices: TypeExercice[] = [];
-    if(dto.recommendedExercises && dto.recommendedExercises.length > 0) {
-        exercices = await exerciceRepository.findBy({id : In(dto.recommendedExercises)})
+    let typeExercises: TypeExercice[] = [];
+    if(dto.exercises && dto.exercises.length > 0) {
+        typeExercises = await exerciceRepository.findBy({id : In(dto.exercises)})
     }
 
     let participants: User[] = [];
@@ -68,7 +80,7 @@ export const updateChallenge = async (challengeId: number, dto: UpdateChallengeD
     if (dto.description !== undefined) {challenge.description = dto.description }
     if (dto.objectives !== undefined) {challenge.objectives = dto.objectives }
     if (dto.durationMinutes !== undefined) {challenge.durationMinutes = dto.durationMinutes }
-    if (dto.recommendedExercises !== undefined) {challenge.recommendedExercises = exercices }
+    if (dto.exercises !== undefined) {challenge.exercises = typeExercises }
     if (dto.participants !== undefined) {challenge.participants = participants }
     if(dto.difficulty !== undefined) {
         if(!Object.values(DifficultyLevel).includes(dto.difficulty)) {
@@ -83,11 +95,11 @@ export const updateChallenge = async (challengeId: number, dto: UpdateChallengeD
 }
 
 export const findAllChallenges = async () => {
-    return challengeRepository.find({relations: ["creator", "recommendedExercises", "participants"]});
+    return challengeRepository.find({relations: ["creator", "exercises", "participants"]});
 }
 
 export const findChallengeId = async (challengeId: number) => {
-    return challengeRepository.findOne({ where: { id: challengeId }, relations: ["creator", "recommendedExercises", "participants"] });
+    return challengeRepository.findOne({ where: { id: challengeId }, relations: ["creator", "exercises", "participants"] });
 }
 
 export const deleteChallenge = async (challengeId: number, currentUserId: string) => {
@@ -132,18 +144,18 @@ export const shareChallenge = async (challengeId: number, participantsIds: numbe
 export const filterChallenges = async(difficulty?: DifficultyLevel, duration?: number, typeExerciceNames?: string[]) => {
     const query: any = {
         where: {},
-        relations:["typesExercice"],
+        relations:["exercises"],
     }
 
     if(difficulty) {
         query.where["difficulty"] = difficulty
     }
-    if(duration !== undefined) {
-        query.where["durationMinutes"] = Equal(duration)
-    }
+if (duration !== undefined && !isNaN(duration)) {
+    query.where["durationMinutes"] = duration;
+}
 
     if(typeExerciceNames && typeExerciceNames.length > 0) {
-        query.where["typesExercice"] = { name: In(typeExerciceNames)}
+        query.where["exercises"] = { name: In(typeExerciceNames)}
     }
     const challenges = await challengeRepository.find(query)
     return challenges

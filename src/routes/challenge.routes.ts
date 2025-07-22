@@ -1,6 +1,6 @@
 import express from 'express'
-import * as challengeController from "../controllers/challengeController"
-import { verifyRefreshToken, verifyToken } from '../middlewares/authMiddleware';
+import * as challengeController from "../controllers/challenge.controller"
+import { verifyRefreshToken, verifyToken } from '../middlewares/auth';
 import { verifyRoles } from '../middlewares/verifyRoles';
 import { Role } from '../enums/Role';
 

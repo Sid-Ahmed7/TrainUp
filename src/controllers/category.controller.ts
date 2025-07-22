@@ -1,6 +1,6 @@
 import { plainToClass } from "class-transformer";
 import { Request, Response } from "express";
-import * as categoryService from "../services/categoryService";
+import * as categoryService from "../services/category.service";
 import { CreateCategoryDTO } from "../DTO/Category/CreateCategoryDTO";
 import { UpdateCategoryDTO } from "../DTO/Category/UpdateCategoryDTO";
 

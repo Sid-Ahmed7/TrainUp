@@ -1,9 +1,9 @@
 import express from "express";
-import * as categoryController from "../controllers/categoryController";
+import * as categoryController from "../controllers/category.controller";
 import { verifyRoles } from "../middlewares/verifyRoles";
 
 import { Role } from "../enums/Role";
-import { verifyToken } from "../middlewares/authMiddleware";
+import { verifyToken } from "../middlewares/auth";
 
 const router = express.Router()
 

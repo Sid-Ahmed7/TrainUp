@@ -1,7 +1,7 @@
 import express from "express";
-import * as targetController from "../controllers/targetController";
+import * as targetController from "../controllers/target.controller";
 import { verifyRoles } from "../middlewares/verifyRoles";
-import { verifyToken } from "../middlewares/authMiddleware";
+import { verifyToken } from "../middlewares/auth";
 
 import { Role } from "../enums/Role";
 

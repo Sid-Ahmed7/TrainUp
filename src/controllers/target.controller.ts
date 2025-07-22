@@ -1,8 +1,8 @@
 import { plainToClass } from "class-transformer";
 import { Request, Response } from "express";
-import * as TargetService from "../services/targetService";
-import { CreateTargetDTO } from "../DTO/Target/CreateTargetDTO";
-import { UpdateTargetDTO } from "../DTO/Target/UpdateTargetDTO";
+import * as TargetService from "../services/target.service";
+import { CreateTargetDTO } from "../DTO/Target/createTarget.dto";
+import { UpdateTargetDTO } from "../DTO/Target/updateTarget.dto";
 
 
 

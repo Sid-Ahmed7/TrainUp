@@ -8,7 +8,7 @@ import { TrainingSession } from "./TrainingSession";
 @Entity()
 export class User {
     
-    @PrimaryGeneratedColumn()
+@PrimaryGeneratedColumn("uuid")
     id!: string;
 
     @Column()

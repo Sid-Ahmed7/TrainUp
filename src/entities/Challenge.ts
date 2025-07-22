@@ -18,9 +18,9 @@ export class Challenge {
     @Column('text')
     description!: string;
 
-    @ManyToMany(() => TypeExercice, { eager: true })
+    @ManyToMany(() => TypeExercice)
     @JoinTable()
-    recommendedExercises!: TypeExercice[];
+    exercises!: TypeExercice[];
 
     @Column()
     objectives!: string;
@@ -29,12 +29,12 @@ export class Challenge {
     durationMinutes!: number;
 
     @Column({type:"enum", enum: DifficultyLevel})
-    difficulty?: DifficultyLevel
+    difficulty!: DifficultyLevel
 
-    @ManyToOne(() => User, user => user.createdChallenges, { eager: true })
+    @ManyToOne(() => User, user => user.createdChallenges)
     creator!: User;
 
-    @ManyToMany(() => User, user => user.joinedChallenges, { eager: true })
+    @ManyToMany(() => User, user => user.joinedChallenges)
     @JoinTable()
     participants!: User[];
 

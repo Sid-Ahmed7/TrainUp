@@ -19,7 +19,8 @@ const AppDataSource = new DataSource({
     port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : undefined,
     entities:[User, Category, Target, Equipment, TypeExercice,TypeExerciceEquipment, Challenge, TrainingSession],
     synchronize: true,
-    logging: false,
+        logging: ["query", "error"],
+    logger: "advanced-console",
 });
 
 export default AppDataSource;

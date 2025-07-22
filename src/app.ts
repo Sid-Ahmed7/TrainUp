@@ -1,4 +1,4 @@
-import express from 'express';
+import express, {Request, Response} from 'express';
 import {config} from 'dotenv';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
@@ -45,5 +45,13 @@ app.use('/api/exercice', routes.typeExerciceRoutes)
 app.use('/api/equipment', routes.equipmentRoutes)
 app.use('/api/exercice-equipment', routes.typeExerciceEquipmentRoutes)
 app.use('/api/challenge', routes.challengeRoutes)
+app.use((req, res, next) => {
+    console.log(`\n🌐 === ${new Date().toISOString()} ===`);
+    console.log(`${req.method} ${req.originalUrl}`);
+    console.log('Headers:', req.headers.authorization ? 'TOKEN PRÉSENT' : 'PAS DE TOKEN');
+    console.log('Query:', req.query);
+    console.log('Params:', req.params);
+    next();
+});
 export default app;
 export {AppDataSource}

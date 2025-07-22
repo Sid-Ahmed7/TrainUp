@@ -2,30 +2,27 @@
 import { Expose } from "class-transformer";
 import { DifficultyLevel } from "../../enums/DifficultyLevel";
 
-export class CreateChallengeDTO {
+export class UpdateChallengeDTO {
 
 
     @Expose()
-    title!: string;
+    title?: string;
 
     @Expose()
-    description!: string;
+    description?: string;
 
     @Expose()
-    objectives!: string;
+    objectives?: string;
 
     @Expose()
-    durationMinutes!: number;
-    
+    durationMinutes?: number;
+
     @Expose()
     difficulty!: DifficultyLevel
 
     @Expose()
-    recommendedExercises!: number[];
+    exercises?: number[];
 
     @Expose()
     participants?: number[];
-
-    @Expose()
-    creatorId!: string;
 }
