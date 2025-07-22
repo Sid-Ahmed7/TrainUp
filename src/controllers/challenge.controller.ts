@@ -63,7 +63,7 @@ export const deleteChallenge = async (req: Request, res: Response) => {
 export const filteredChallenges = async(req: Request, res: Response) => {
     try {
         const difficulty: DifficultyLevel | undefined = req.query.difficulty as DifficultyLevel
-        const duration: string= req.query.duration ? req.query.duration : undefined;
+        const duration: number = req.query.duration ? Number(req.query.duration) : null
         const typeExerciceNames: string[] =  req.query.types ? (req.query.types as string).split(',') : [];
 
         if (duration !== undefined) {
