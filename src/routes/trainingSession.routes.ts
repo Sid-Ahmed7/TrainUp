@@ -21,6 +21,10 @@ router.get(
     trainingSessionController.getSessionByUser(req, res).catch(next);
   }
 );
+router.get("/stats/:challengeId", verifyToken, verifyRoles(Role.USER),(req, res, next) => {
+    trainingSessionController.getTrainingStats(req, res, next).catch(next);
+  })
+
 
 router.put(
   "/:sessionId",
@@ -34,5 +38,6 @@ router.put(
 router.delete("/:id", verifyToken, verifyRoles(Role.USER), (req, res, next) => {
   trainingSessionController.deleteSesison(req, res).catch(next);
 });
+
 
 export default router;

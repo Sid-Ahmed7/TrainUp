@@ -10,8 +10,8 @@ export class TrainingSessionController {
     async createSession(req: Request, res: Response){
         try {
             const dto = plainToClass(CreateTrainingSessionDTO, req.body)
-            const currentUserId = req.user.id
-            const session = await trainingSession.createTrainingSession(dto, currentUserId)
+            const userId = req.user.id
+            const session = await trainingSession.createTrainingSession(dto, userId)
             res.status(201).json(session)
         } catch (error) {
         res.status(400).json({ error: (error as Error).message });

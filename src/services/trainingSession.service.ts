@@ -163,17 +163,11 @@ export class TrainingSessionService {
       );
     }
 
-    const start = new Date(challenge.startDate);
-    const end = new Date(challenge.endDate);
-    if (start >= end) {
-      throw new Error("La date de début doit être antérieure à la date de fin");
-    }
-
     const sessions = await trainingSessionRepository.find({
       where: {
         user: { id: userId },
         challenge: { id: challengeId },
-        startDate: Between(start, end),
+        
       },
     });
 
