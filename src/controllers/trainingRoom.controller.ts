@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { TrainingRoomService } from "../services/TrainingRoom.service";
+import { TrainingRoomService } from "../services/trainingRoom.service";
 import { RoomStatus } from "../entities/TrainingRoom";
 
 const trainingRoomService = new TrainingRoomService();
