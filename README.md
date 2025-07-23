@@ -34,6 +34,10 @@ npm install
 openssl rand -hex 32
 ```
 
+```shell
+chmod +x ./*.sh
+```
+
 3. Créez un fichier .env
 
 ```shell
@@ -55,4 +59,17 @@ L'expiration du bearer et du jwt est en seconde
 
 ```shell
 npm run build && npm start
+```
+
+```SQL DELETE
+DO $$
+DECLARE
+    r RECORD;
+BEGIN
+    -- Supprimer toutes les tables du schéma public
+    FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public') LOOP
+        EXECUTE 'DROP TABLE IF EXISTS "' || r.tablename || '" CASCADE;';
+    END LOOP;
+END
+$$;
 ```

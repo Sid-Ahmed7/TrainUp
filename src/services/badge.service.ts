@@ -13,7 +13,7 @@ const trainingSessionRepository = AppDataSource.getRepository(TrainingSession);
 
 export class BadgeService {
 
-    static async createBadge(dto: CreateBadgeDTO) {
+    async createBadge(dto: CreateBadgeDTO) {
     const existingBadge = await badgeRepository.findOne({
         where: { name: dto.name }
     });
@@ -34,19 +34,19 @@ export class BadgeService {
         return badgeRepository.save(badge);
     }
 
-    static async getAllBadges() {
+     async getAllBadges() {
         return badgeRepository.find({
             order: { createdAt: "DESC" }
         });
     }
 
-    static async getBadgeById(badgeId: number) {
+     async getBadgeById(badgeId: number) {
         return badgeRepository.findOne({
             where: { id: badgeId }
         });
     }
 
-    static async updateBadge(badgeId: number, dto: UpdateBadgeDTO) {
+    async updateBadge(badgeId: number, dto: UpdateBadgeDTO) {
         const badge = await badgeRepository.findOne({
             where: { id: badgeId }
         });
@@ -75,7 +75,7 @@ export class BadgeService {
         return badgeRepository.save(badge);
     }
 
-    static async deleteBadge(badgeId: number) {
+    async deleteBadge(badgeId: number) {
         const badge = await badgeRepository.findOne({ where: { id: badgeId } });
         
         if (!badge) {
@@ -85,7 +85,7 @@ export class BadgeService {
         return badgeRepository.delete(badgeId);
     }
 
-    static async awardBadgeToUser(userId: string, badgeId: number, reason?: string) {
+     async awardBadgeToUser(userId: string, badgeId: number, reason?: string) {
         const existingUserBadge = await userBadgeRepository.findOne({
             where: { userId, badgeId }
         });
@@ -103,7 +103,7 @@ export class BadgeService {
         return userBadgeRepository.save(userBadge);
     }
 
-    static async getUserBadges(userId: string) {
+     async getUserBadges(userId: string) {
         return userBadgeRepository.find({
             where: { userId },
             relations: ["badge"],
@@ -111,7 +111,7 @@ export class BadgeService {
         });
     }
 
-    static async checkAndAwardBadges(userId: string) {
+     async checkAndAwardBadges(userId: string) {
         const activeBadges = await badgeRepository.find({
             where: { isActive: true }
         });
@@ -144,7 +144,7 @@ export class BadgeService {
         return newBadges;
     }
 
-    private static async checkBadgeRule(userId: string, badge: Badge) {
+    private  async checkBadgeRule(userId: string, badge: Badge) {
         if (!badge.ruleType || !badge.ruleValue) {
             return null;
         }
@@ -183,7 +183,7 @@ export class BadgeService {
         return null;
     }
 
-    private static async getConsecutiveTrainingDays(userId: string): Promise<number> {
+    private  async getConsecutiveTrainingDays(userId: string): Promise<number> {
         const sessions = await trainingSessionRepository.find({
             where: { user: { id: userId } },
             order: { startDate: "DESC" }
@@ -212,7 +212,7 @@ export class BadgeService {
         return consecutiveDays;
     }
 
-    private static async getUserTotalPoints(userId: string): Promise<number> {
+    private  async getUserTotalPoints(userId: string): Promise<number> {
         const userBadges = await userBadgeRepository.find({
             where: { userId },
             relations: ["badge"]

@@ -1,28 +1,44 @@
 import express from "express";
-import {CategoryController} from "../controllers/category.controller";
+import { CategoryController } from "../controllers/category.controller";
 import { verifyRoles } from "../middlewares/verifyRoles";
 
 import { Role } from "../enums/Role";
 import { verifyToken } from "../middlewares/auth";
 
-const router = express.Router()
+const router = express.Router();
+const categoryController = new CategoryController()
 
-router.post("/nouvelle", verifyToken,verifyRoles(Role.SUPER_ADMIN),CategoryController.createCategory)
+router.post(
+  "/new",
+  verifyToken,
+  verifyRoles(Role.SUPER_ADMIN),
+  categoryController.createCategory
+);
 
-router.get("/",CategoryController.getAllCategories)
+router.get("/", categoryController.getAllCategories);
 
 router.get("/:id", (req, res, next) => {
-	CategoryController.getCategory(req, res).catch(next);
+  categoryController.getCategory(req, res).catch(next);
 });
 
-router.put("/:id", verifyToken, verifyRoles(Role.SUPER_ADMIN), (req, res, next) => {
-	CategoryController.updateCategory(req, res).catch(next);
-});
+router.put(
+  "/:id",
+  verifyToken,
+  verifyRoles(Role.SUPER_ADMIN),
+  (req, res, next) => {
+    categoryController.updateCategory(req, res).catch(next);
+  }
+);
 
-router.delete("/:id", verifyToken, verifyRoles(Role.SUPER_ADMIN), (req, res, next) => {
-	CategoryController.deleteCategory(req, res).then(() => {}).catch(next);
-});
-
-
+router.delete(
+  "/:id",
+  verifyToken,
+  verifyRoles(Role.SUPER_ADMIN),
+  (req, res, next) => {
+    categoryController.deleteCategory(req, res)
+      .then(() => {})
+      .catch(next);
+  }
+);
 
 export default router;

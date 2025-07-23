@@ -4,31 +4,32 @@ import { CreateBadgeDTO } from "../DTO/Badge/CreateBadgeDTO";
 import { UpdateBadgeDTO } from "../DTO/Badge/UpdateBadgeDTO";
 import { BadgeService } from "../services/badge.service";
 
+const badgeService = new BadgeService()
 export class BadgeController {
 
-    static async createBadge(req: Request, res: Response) {
+     async createBadge(req: Request, res: Response) {
         try {
             const dto = plainToClass(CreateBadgeDTO, req.body);
-            const badge = await BadgeService.createBadge(dto);
+            const badge = await badgeService.createBadge(dto);
             res.status(201).json(badge);
         } catch (error: any) {
             res.status(400).json({ message: error.message });
         }
     }
 
-    static async getAllBadges(req: Request, res: Response) {
+     async getAllBadges(req: Request, res: Response) {
         try {
-            const badges = await BadgeService.getAllBadges();
+            const badges = await badgeService.getAllBadges();
             res.status(200).json(badges);
         } catch (error: any) {
             res.status(400).json({ message: error.message });
         }
     }
 
-    static async getBadge(req: Request, res: Response) {
+     async getBadge(req: Request, res: Response) {
         try {
             const badgeId = parseInt(req.params.id);
-            const badge = await BadgeService.getBadgeById(badgeId);
+            const badge = await badgeService.getBadgeById(badgeId);
             
             if (!badge) {
                 return res.status(404).json({ message: "Badge introuvable" });
@@ -40,22 +41,22 @@ export class BadgeController {
         }
     }
 
-    static async updateBadge(req: Request, res: Response) {
+    async updateBadge(req: Request, res: Response) {
         try {
             const badgeId = parseInt(req.params.id);
             const dto = plainToClass(UpdateBadgeDTO, req.body);
             
-            const updatedBadge = await BadgeService.updateBadge(badgeId, dto);
+            const updatedBadge = await badgeService.updateBadge(badgeId, dto);
             res.status(200).json(updatedBadge);
         } catch (error: any) {
             res.status(400).json({ message: error.message });
         }
     }
 
-    static async deleteBadge(req: Request, res: Response) {
+    async deleteBadge(req: Request, res: Response) {
         try {
             const badgeId = parseInt(req.params.id);
-            const result = await BadgeService.deleteBadge(badgeId);
+            const result = await badgeService.deleteBadge(badgeId);
             
             if (result.affected === 0) {
                 return res.status(404).json({ message: "Badge introuvable" });
@@ -67,43 +68,43 @@ export class BadgeController {
         }
     }
 
-    static async awardBadgeToUser(req: Request, res: Response) {
+     async awardBadgeToUser(req: Request, res: Response) {
         try {
             const badgeId = parseInt(req.params.badgeId);
             const userId = req.params.userId;
             const reason = req.body.reason;
             
-            const userBadge = await BadgeService.awardBadgeToUser(userId, badgeId, reason);
+            const userBadge = await badgeService.awardBadgeToUser(userId, badgeId, reason);
             res.status(201).json(userBadge);
         } catch (error: any) {
             res.status(400).json({ message: error.message });
         }
     }
 
-    static async getUserBadges(req: Request, res: Response) {
+     async getUserBadges(req: Request, res: Response) {
         try {
             const userId = req.params.userId;
-            const userBadges = await BadgeService.getUserBadges(userId);
+            const userBadges = await badgeService.getUserBadges(userId);
             res.status(200).json(userBadges);
         } catch (error: any) {
             res.status(400).json({ message: error.message });
         }
     }
 
-    static async getMyBadges(req: Request, res: Response) {
+     async getMyBadges(req: Request, res: Response) {
         try {
             const userId = req.user.id;
-            const userBadges = await BadgeService.getUserBadges(userId);
+            const userBadges = await badgeService.getUserBadges(userId);
             res.status(200).json(userBadges);
         } catch (error: any) {
             res.status(400).json({ message: error.message });
         }
     }
 
-    static async checkAndAwardBadges(req: Request, res: Response) {
+     async checkAndAwardBadges(req: Request, res: Response) {
         try {
             const userId = req.user.id;
-            const newBadges = await BadgeService.checkAndAwardBadges(userId);
+            const newBadges = await badgeService.checkAndAwardBadges(userId);
             res.status(200).json({
                 message: `${newBadges.length} nouveaux badges obtenus`,
                 badges: newBadges

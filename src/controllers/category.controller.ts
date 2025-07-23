@@ -4,14 +4,14 @@ import {CategoryService} from "../services/category.service";
 import { CreateCategoryDTO } from "../DTO/Category/createCategory.dto";
 import { UpdateCategoryDTO } from "../DTO/Category/updateCategory.dto";
 
-
+const categoryService = new CategoryService()
 export class CategoryController {
 
-static async createCategory(req: Request, res: Response) {
+ async createCategory(req: Request, res: Response) {
     const dto = plainToClass(CreateCategoryDTO, req.body);
 
     try {
-        const category = await CategoryService.createCategory(dto);
+        const category = await categoryService.createCategory(dto);
         res.status(201).json(category);
 
     } catch(error: any) {
@@ -19,13 +19,13 @@ static async createCategory(req: Request, res: Response) {
     }
 }
 
-static async getAllCategories(req: Request, res: Response) {
-    const categories = await CategoryService.findAllCategories();
+ async getAllCategories(req: Request, res: Response) {
+    const categories = await categoryService.findAllCategories();
     res.status(200).json(categories);
 }
 
-static async getCategory(req: Request, res: Response) {
-    const category = await CategoryService.findCategoryById(Number(req.params.id))
+ async getCategory(req: Request, res: Response) {
+    const category = await categoryService.findCategoryById(Number(req.params.id))
     
     if(!category) {
         return res.status(404).json({ message: "Aucune category trouvé" })
@@ -35,11 +35,11 @@ static async getCategory(req: Request, res: Response) {
 }
 
 
-static async updateCategory(req: Request, res: Response) {
+ async updateCategory(req: Request, res: Response) {
     const dto = plainToClass(UpdateCategoryDTO, req.body);
     const id = Number(req.params.id)
     try {
-        const updatedCategory = await CategoryService.updateCategory(id, dto);
+        const updatedCategory = await categoryService.updateCategory(id, dto);
         if (!updatedCategory) {
             return res.status(404).json({ message: "Aucune category trouvé"})
         
@@ -50,9 +50,9 @@ static async updateCategory(req: Request, res: Response) {
     }
 }
 
-static async deleteCategory(req: Request, res: Response) {
+ async deleteCategory(req: Request, res: Response) {
   const id = Number(req.params.id);
-  const deletedCategory = await CategoryService.deleteCategory(id);
+  const deletedCategory = await categoryService.deleteCategory(id);
   if (!deletedCategory){
     return res.status(404).json({ message: "Aucune category trouvé" });
   }

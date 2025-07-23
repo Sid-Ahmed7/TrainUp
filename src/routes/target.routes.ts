@@ -1,28 +1,42 @@
 import express from "express";
-import {TargetController} from "../controllers/target.controller";
+import { TargetController } from "../controllers/target.controller";
 import { verifyRoles } from "../middlewares/verifyRoles";
 import { verifyToken } from "../middlewares/auth";
 
 import { Role } from "../enums/Role";
 
-const router = express.Router()
+const router = express.Router();
+const targetController = new TargetController()
 
-router.post("/nouvelle",verifyToken,verifyRoles(Role.SUPER_ADMIN),TargetController.createTarget)
+router.post(
+  "/new",
+  verifyToken,
+  verifyRoles(Role.SUPER_ADMIN),
+  targetController.createTarget
+);
 
-router.get("/",TargetController.getAllTargets)
+router.get("/", targetController.getAllTargets);
 
 router.get("/:id", (req, res, next) => {
-    TargetController.getTarget(req, res).catch(next);
+  targetController.getTarget(req, res).catch(next);
 });
 
-router.put("/:id",verifyToken, verifyRoles(Role.SUPER_ADMIN), (req, res, next) => {
-    TargetController.updateTarget(req, res).catch(next);
-});
+router.put(
+  "/:id",
+  verifyToken,
+  verifyRoles(Role.SUPER_ADMIN),
+  (req, res, next) => {
+    targetController.updateTarget(req, res).catch(next);
+  }
+);
 
-router.delete("/:id",verifyToken, verifyRoles(Role.SUPER_ADMIN), (req, res, next) => {
-    TargetController.deleteTarget(req, res).catch(next);
-});
-
-
+router.delete(
+  "/:id",
+  verifyToken,
+  verifyRoles(Role.SUPER_ADMIN),
+  (req, res, next) => {
+    targetController.deleteTarget(req, res).catch(next);
+  }
+);
 
 export default router;
