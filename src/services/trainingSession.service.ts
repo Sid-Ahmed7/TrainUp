@@ -5,9 +5,11 @@ import AppDataSource from "../config/db";
 import { CreateTrainingSessionDTO } from "../DTO/TrainingSession/createSession.dto";
 import { UpdateTrainingSessionDTO } from "../DTO/TrainingSession/update.session";
 import { BadgeService } from "./badge.service";
+import { RewardService } from "./rewardService";
 import { Between } from "typeorm";
 
-const badgeService = new BadgeService()
+const badgeService = new BadgeService();
+const rewardService = new RewardService();
 const trainingSessionRepository = AppDataSource.getRepository(TrainingSession);
 const userRepository = AppDataSource.getRepository(User);
 const challengeRepository = AppDataSource.getRepository(Challenge);
@@ -51,15 +53,19 @@ export class TrainingSessionService {
 
     const savedSession = await trainingSessionRepository.save(session);
 
-    // Vérifier automatiquement les nouveaux badges
-    try {
-      await badgeService.checkAndAwardBadges(currentUserId);
-    } catch (error) {
-      console.log("Erreur lors de la vérification des badges:", error);
-      // Ne pas faire échouer la création de session si les badges échouent
-    }
+     try {
+       await badgeService.checkAndAwardBadges(dto.userId);
+     } catch (error) {
+       console.log("Erreur lors de la vérification des badges:", error);
+     }
 
-    return savedSession;
+     try {
+       await rewardService.checkAndAwardRewards(dto.userId);
+     } catch (error) {
+       console.log("Erreur lors de la vérification des récompenses:", error);
+     }
+
+     return savedSession;
   }
 
    async findAllSessionByUser(

@@ -1,5 +1,6 @@
 import AppDataSource from "../config/db";
 import { CreateBadgeDTO } from "../DTO/Badge/CreateBadgeDTO";
+import { UpdateBadgeDTO } from "../DTO/Badge/UpdateBadgeDTO";
 import { Badge } from "../entities/Badge";
 import { UserBadge } from "../entities/UserBadge";
 import { User } from "../entities/User";
@@ -45,7 +46,36 @@ export class BadgeService {
         });
     }
 
-     async deleteBadge(badgeId: number) {
+    async updateBadge(badgeId: number, dto: UpdateBadgeDTO) {
+        const badge = await badgeRepository.findOne({
+            where: { id: badgeId }
+        });
+
+        if (!badge) {
+            throw new Error("Badge introuvable");
+        }
+
+        if (dto.name && dto.name !== badge.name) {
+            const existingBadge = await badgeRepository.findOne({
+                where: { name: dto.name }
+            });
+
+            if (existingBadge) {
+                throw new Error("Un badge avec ce nom existe déjà");
+            }
+        }
+
+        if (dto.name !== undefined) badge.name = dto.name;
+        if (dto.description !== undefined) badge.description = dto.description;
+        if (dto.points !== undefined) badge.points = dto.points;
+        if (dto.ruleType !== undefined) badge.ruleType = dto.ruleType;
+        if (dto.ruleValue !== undefined) badge.ruleValue = dto.ruleValue;
+        if (dto.isActive !== undefined) badge.isActive = dto.isActive;
+
+        return badgeRepository.save(badge);
+    }
+
+    async deleteBadge(badgeId: number) {
         const badge = await badgeRepository.findOne({ where: { id: badgeId } });
         
         if (!badge) {

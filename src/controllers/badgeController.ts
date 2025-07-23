@@ -1,6 +1,7 @@
 import { plainToClass } from "class-transformer";
 import { Request, Response } from "express";
 import { CreateBadgeDTO } from "../DTO/Badge/CreateBadgeDTO";
+import { UpdateBadgeDTO } from "../DTO/Badge/UpdateBadgeDTO";
 import { BadgeService } from "../services/badge.service";
 
 const badgeService = new BadgeService()
@@ -40,7 +41,19 @@ export class BadgeController {
         }
     }
 
-     async deleteBadge(req: Request, res: Response) {
+    async updateBadge(req: Request, res: Response) {
+        try {
+            const badgeId = parseInt(req.params.id);
+            const dto = plainToClass(UpdateBadgeDTO, req.body);
+            
+            const updatedBadge = await badgeService.updateBadge(badgeId, dto);
+            res.status(200).json(updatedBadge);
+        } catch (error: any) {
+            res.status(400).json({ message: error.message });
+        }
+    }
+
+    async deleteBadge(req: Request, res: Response) {
         try {
             const badgeId = parseInt(req.params.id);
             const result = await badgeService.deleteBadge(badgeId);
