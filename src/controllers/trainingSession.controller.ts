@@ -5,9 +5,8 @@ import {TrainingSessionService} from "../services/trainingSession.service"
 import { UpdateTrainingSessionDTO } from "../DTO/TrainingSession/update.session";
 
 export class TrainingSessionController {
-    
 
-    static async createSession(req: Request, res: Response){
+    async createSession(req: Request, res: Response){
         try {
             const dto = plainToClass(CreateTrainingSessionDTO, req.body)
             const session = await TrainingSessionService.createTrainingSession(dto)
@@ -18,7 +17,7 @@ export class TrainingSessionController {
 
     }
 
-    static async  getSessionByUser(req:Request, res:Response) {
+     async  getSessionByUser(req:Request, res:Response) {
         try {
                 const userId = req.user?.id;
                 const startDate = req.query.startDate ? String(req.query.startDate) : undefined
@@ -33,7 +32,7 @@ export class TrainingSessionController {
                 return res.status(400).json({ error: (error as Error).message });
             }
     }
-    static async updateSession(req: Request, res: Response){
+     async updateSession(req: Request, res: Response){
         const dto = plainToClass(UpdateTrainingSessionDTO, req.body);
         const id = Number(req.params.id as string)
         const currentUserId = req.user.id;
@@ -51,7 +50,7 @@ export class TrainingSessionController {
         }
     }
 
-    static async deleteSesison (req: Request, res: Response)  {
+     async deleteSesison (req: Request, res: Response)  {
     const id = Number(req.params.id as string);
     const currentUserId = req.user.id;
 
@@ -59,7 +58,7 @@ export class TrainingSessionController {
     res.status(204).send();
     };
 
-    static async getTrainingStats(req: Request, res: Response, next: NextFunction) {
+     async getTrainingStats(req: Request, res: Response, next: NextFunction) {
         try {
             const userId = req.user.id
             const challengeId = Number(req.params.challengeId)

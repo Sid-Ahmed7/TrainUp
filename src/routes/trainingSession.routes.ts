@@ -1,11 +1,11 @@
 import express from "express";
-import {TrainingSessionController} from "../controllers/trainingSession.controller";
-import { verifyRefreshToken, verifyToken } from "../middlewares/auth";
+import { TrainingSessionController } from "../controllers/trainingSession.controller";
+import { verifyToken } from "../middlewares/auth";
 import { verifyRoles } from "../middlewares/verifyRoles";
 import { Role } from "../enums/Role";
 
 const router = express.Router();
-
+const trainingSessionController = new TrainingSessionController();
 router.post(
   "/new",
   verifyToken,
@@ -13,16 +13,21 @@ router.post(
   trainingSessionController.createSession
 );
 
-router.get("/:userId", verifyToken, verifyRoles(Role.USER), (req, res, next) => {
-  TrainingSessionController.getSessionByUser(req, res).catch(next);
-});
+router.get(
+  "/:userId",
+  verifyToken,
+  verifyRoles(Role.USER),
+  (req, res, next) => {
+    trainingSessionController.getSessionByUser(req, res).catch(next);
+  }
+);
 
 router.put(
   "/:sessionId",
   verifyToken,
   verifyRoles(Role.USER),
   (req, res, next) => {
-    TrainingSessionController.updateSession(req, res).catch(next);
+    trainingSessionController.updateSession(req, res).catch(next);
   }
 );
 
