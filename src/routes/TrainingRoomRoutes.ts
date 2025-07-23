@@ -14,7 +14,7 @@ router.post(
     trainingRoomController.createRoom(req, res).catch(next);
   }
 );
-router.post(
+router.put(
   "/:id/assign",
   verifyToken,
   verifyRoles(Role.SUPER_ADMIN),

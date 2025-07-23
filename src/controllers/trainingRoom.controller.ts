@@ -24,8 +24,9 @@ export class TrainingRoomController {
 
   assignRoom = async (req: Request, res: Response) => {
     try {
-      const { roomId, userId } = req.body;
-      const room = await trainingRoomService.assignTrainingRoom(roomId, userId);
+      const roomId = Number(req.params.id);
+      const userEmail = req.query.userEmail as string;
+      const room = await trainingRoomService.assignTrainingRoom(roomId, userEmail);
       res.json(room);
     } catch (error: any) {
       res.status(400).json({ error: error.message });

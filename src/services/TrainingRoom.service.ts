@@ -136,16 +136,20 @@ export class TrainingRoomService {
     const room = await this.getTrainingRoomById(id);
     await trainingRoomRepository.remove(room);
   };
-  assignTrainingRoom = async (roomId: number, userId: string) => {
+  assignTrainingRoom = async (roomId: number, userEmail: string) => {
     const room = await this.getTrainingRoomById(roomId);
-    const user = await userRepository.findOneBy({ id: userId });
+    const user = await userRepository.findOneBy({ email: userEmail });
 
     if (!user) {
       throw new Error("Utilisateur introuvable");
     }
-    if (user.role !== "USER") {
+    if (user.role === "OWNER") {
       room.owner = user;
-      return await trainingRoomRepository.save(room);
+      await trainingRoomRepository.save(room);
+      return {
+        ...room,
+        owner: room.owner ? { id: room.owner.id } : null,
+      };
     }
   };
 
