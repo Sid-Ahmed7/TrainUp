@@ -33,12 +33,33 @@ export class TrainingRoomService {
 
     return await trainingRoomRepository.save(room);
   };
+
   getTrainingRooms = async (status?: RoomStatus) => {
     const where = status ? { status } : {};
-    return await trainingRoomRepository.find({
+    const rooms = await trainingRoomRepository.find({
       where,
       relations: ["owner"],
     });
+    return rooms.map((room) => ({
+      ...room,
+      owner: room.owner ? { id: room.owner.id } : null,
+    }));
+  };
+
+  getTrainingRoomByIdOut = async (id: number) => {
+    const room = await trainingRoomRepository.findOne({
+      where: { id },
+      relations: ["owner"],
+    });
+
+    if (!room) {
+      throw new Error("Salle introuvable");
+    }
+
+    return {
+      ...room,
+      owner: room.owner ? { id: room.owner.id } : null,
+    };
   };
 
   getTrainingRoomById = async (id: number) => {

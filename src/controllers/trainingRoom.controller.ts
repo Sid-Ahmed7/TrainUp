@@ -8,16 +8,20 @@ export class TrainingRoomController {
   createRoom = async (req: Request, res: Response) => {
     try {
       const user = (req as any).user;
-      console.log(user);
       const room = await trainingRoomService.createTrainingRoom(
         req.body,
         user.email
       );
-      res.status(201).json(room);
+      const response = {
+        ...room,
+        owner: room.owner ? { id: room.owner.id } : null,
+      };
+      res.status(201).json(response);
     } catch (error: any) {
       res.status(400).json({ error: error.message });
     }
   };
+
   assignRoom = async (req: Request, res: Response) => {
     try {
       const { roomId, userId } = req.body;
@@ -42,7 +46,7 @@ export class TrainingRoomController {
 
   getRoomById = async (req: Request, res: Response) => {
     try {
-      const room = await trainingRoomService.getTrainingRoomById(
+      const room = await trainingRoomService.getTrainingRoomByIdOut(
         Number(req.params.id)
       );
       res.json(room);
