@@ -1,11 +1,11 @@
 import express from "express";
-import * as trainingRoomController from "../controllers/trainingRoom.controller";
+import { TrainingRoomController } from "../controllers/trainingRoom.controller";
 import { verifyRoles } from "../middlewares/verifyRoles";
 import { verifyToken } from "../middlewares/auth";
 import { Role } from "../enums/Role";
 
 const router = express.Router();
-
+const trainingRoomController = new TrainingRoomController();
 // Création d'une salle (OWNER et SUPER_ADMIN)
 router.post(
   "/new",
@@ -13,6 +13,14 @@ router.post(
   verifyRoles(Role.OWNER, Role.SUPER_ADMIN),
   (req, res, next) => {
     trainingRoomController.createRoom(req, res).catch(next);
+  }
+);
+router.post(
+  "/:id/assign",
+  verifyToken,
+  verifyRoles(Role.SUPER_ADMIN),
+  (req, res, next) => {
+    trainingRoomController.assignRoom(req, res).catch(next);
   }
 );
 
