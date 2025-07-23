@@ -70,7 +70,6 @@ export const createTypeExercice = async (dto: CreateTypeExerciceDTO) => {
     typeExercice.equipments = createEquipment;
     await typeExerciceRepository.save(typeExercice);
   }
-
   return typeExercice;
 };
 

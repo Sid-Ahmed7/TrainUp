@@ -9,19 +9,36 @@ const typeExerciceEquipmentRepository = AppDataSource.getRepository(
 const typeExerciceRepository = AppDataSource.getRepository(TypeExercice);
 const equipementRepository = AppDataSource.getRepository(Equipment);
 
+export const createTypeExerciceEquipmentWithOutCustom = async (
+  exerciceId: number,
+  equipementId: number
+) => {
+  const exercice = await typeExerciceRepository.findOneBy({ id: exerciceId });
+  const equipment = await equipementRepository.findOneBy({ id: equipementId });
+  if (!exercice || !equipment) {
+    throw new Error("Exercice ou Equipement non trouvé");
+  }
+
+  const saved = await typeExerciceEquipmentRepository.save(
+    typeExerciceEquipmentRepository.create({ exercice, equipment })
+  );
+  return {
+    id: saved.id,
+    exerciceId: exercice.id,
+    equipmentId: equipment.id,
+  };
+};
 export const createTypeExerciceEquipment = async (
   exerciceId: number,
   equipementId: number
 ) => {
   const exercice = await typeExerciceRepository.findOneBy({ id: exerciceId });
   const equipment = await equipementRepository.findOneBy({ id: equipementId });
-  console.log("exercice", exercice);
-  console.log("equipment", equipment);
   if (!exercice || !equipment) {
     throw new Error("Exercice ou Equipement non trouvé");
   }
 
-  return typeExerciceEquipmentRepository.save(
+  return await typeExerciceEquipmentRepository.save(
     typeExerciceEquipmentRepository.create({ exercice, equipment })
   );
 };
@@ -40,16 +57,38 @@ export const getEquipmentForExercice = async (exerciceId: number) => {
   return equipmentOfExercice.map((eq) => eq.equipment);
 };
 
-export const deleteByEquipmentID = async (equipmentId: number) => {
-  const res = await typeExerciceEquipmentRepository.delete({
-    equipment: { id: equipmentId },
+export const deleteByEquipmentId = async (equipmentId: number) => {
+  const toDelete = await typeExerciceEquipmentRepository.find({
+    where: { equipment: { id: equipmentId } },
+    select: ["id"],
   });
+  if (!toDelete.length) return false;
+
+  const ids = toDelete
+    .map((teq) => teq.id)
+    .filter((id) => typeof id === "number" && !isNaN(id));
+  if (!ids.length) return false;
+  const res = await typeExerciceEquipmentRepository.delete(ids);
   return res.affected !== 0;
 };
 
 export const deleteByExerciceId = async (exerciceId: number) => {
-  const res = await typeExerciceEquipmentRepository.delete({
-    exercice: { id: exerciceId },
+  const toDelete = await typeExerciceEquipmentRepository.find({
+    where: { exercice: { id: exerciceId } },
+    select: ["id"],
   });
+
+  if (!toDelete.length) return false;
+
+  const ids = toDelete
+    .map((teq) => teq.id)
+    .filter((id) => typeof id === "number" && !isNaN(id));
+
+  if (!ids.length) {
+    return false;
+  }
+
+  const res = await typeExerciceEquipmentRepository.delete(ids);
+
   return res.affected !== 0;
 };
