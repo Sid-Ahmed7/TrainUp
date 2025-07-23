@@ -13,8 +13,8 @@ const userRepository = AppDataSource.getRepository(User);
 const challengeRepository = AppDataSource.getRepository(Challenge);
 
 export class TrainingSessionService {
-   async createTrainingSession(dto: CreateTrainingSessionDTO) {
-    const user = await userRepository.findOne({ where: { id: dto.userId } });
+   async createTrainingSession(dto: CreateTrainingSessionDTO, currentUserId:string) {
+    const user = await userRepository.findOne({ where: { id: currentUserId } });
 
     if (!user) {
       throw new Error("Utilisateur non trouvé");
@@ -30,7 +30,7 @@ export class TrainingSessionService {
 
     const existingSession = await trainingSessionRepository.findOne({
       where: {
-        user: { id: dto.userId },
+        user: { id: currentUserId },
         challenge: { id: dto.challengeId },
         startDate: new Date(dto.startDate),
       },
@@ -53,7 +53,7 @@ export class TrainingSessionService {
 
     // Vérifier automatiquement les nouveaux badges
     try {
-      await badgeService.checkAndAwardBadges(dto.userId);
+      await badgeService.checkAndAwardBadges(currentUserId);
     } catch (error) {
       console.log("Erreur lors de la vérification des badges:", error);
       // Ne pas faire échouer la création de session si les badges échouent

@@ -13,9 +13,9 @@ const exerciceRepository = AppDataSource.getRepository(TypeExercice);
 
 export class ChallengeService {
     
-     async createChallenge(dto: CreateChallengeDTO){
+     async createChallenge(dto: CreateChallengeDTO, creatorId: string){
 
-    const creator = await userRepository.findOneBy({ id: dto.creatorId})
+    const creator = await userRepository.findOneBy({ id: creatorId})
 
     if (!creator) {
         throw new Error("le créateur du challenge n'existe pas");
@@ -24,7 +24,7 @@ export class ChallengeService {
     const existingChallenge = await challengeRepository.findOne({
         where: {
             title: dto.title,
-            creator: {id: dto.creatorId}
+            creator: {id: creatorId}
         }
     })
 

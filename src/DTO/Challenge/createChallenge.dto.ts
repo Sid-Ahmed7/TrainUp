@@ -38,8 +38,4 @@ export class CreateChallengeDTO {
     @Expose()
     participants?: number[];
 
-    @Expose()
-    creatorId!: string;
-
-
 }

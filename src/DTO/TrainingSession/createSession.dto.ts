@@ -1,8 +1,6 @@
 import { Expose } from "class-transformer";
 
 export class CreateTrainingSessionDTO {
-  @Expose()
-  userId!: string;
 
   @Expose()
   challengeId!: number;
