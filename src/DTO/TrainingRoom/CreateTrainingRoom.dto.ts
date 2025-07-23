@@ -4,7 +4,6 @@ export interface CreateTrainingRoomDTO {
   address: string;
   description?: string;
   capacity: number;
-  equipment: string[];
   typeExerciceEquipments: {
     exerciceId: number;
     equipmentId?: number;

@@ -113,7 +113,11 @@ export class TrainingRoomService {
     const updatedRoom = await trainingRoomRepository.save(room);
 
     // DTO no User
-    return this.mapToUpdateOutDTO(updatedRoom);
+    const result = this.mapToUpdateOutDTO(updatedRoom);
+    return {
+      ...result,
+      owner: result.owner ? { id: result.owner.id } : null,
+    };
   };
 
   approveTrainingRoom = async (id: number) => {
