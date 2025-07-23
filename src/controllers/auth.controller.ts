@@ -9,7 +9,7 @@ const userRepository = AppDataSource.getRepository(User);
 
 export class AuthController {
 
-    static async register(req: Request, res:Response){
+     async register(req: Request, res:Response){
 
     try {
         const credentials: Register = req.body;
@@ -20,7 +20,7 @@ export class AuthController {
     }
 };
 
-    static async login(req: Request, res:Response){
+     async login(req: Request, res:Response){
 
     try {
         const credentials: Login = req.body;
@@ -31,7 +31,7 @@ export class AuthController {
     }
 };
 
-static async refreshToken(req: Request, res: Response){
+ async refreshToken(req: Request, res: Response){
 
     try {
         const {email} = (req as any).user;
