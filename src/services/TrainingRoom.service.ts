@@ -123,13 +123,21 @@ export class TrainingRoomService {
   approveTrainingRoom = async (id: number) => {
     const room = await this.getTrainingRoomById(id);
     room.status = RoomStatus.APPROVED;
-    return await trainingRoomRepository.save(room);
+    await trainingRoomRepository.save(room);
+    return {
+      ...room,
+      owner: room.owner ? { id: room.owner.id } : null,
+    };
   };
 
   rejectTrainingRoom = async (id: number) => {
     const room = await this.getTrainingRoomById(id);
     room.status = RoomStatus.REJECTED;
-    return await trainingRoomRepository.save(room);
+    await trainingRoomRepository.save(room);
+    return {
+      ...room,
+      owner: room.owner ? { id: room.owner.id } : null,
+    };
   };
 
   deleteTrainingRoom = async (id: number) => {
