@@ -35,6 +35,6 @@ export class CreateChallengeDTO {
   @Expose()
   participants?: string[];
 
-  @Expose()
-  creatorId!: string;
+
+
 }

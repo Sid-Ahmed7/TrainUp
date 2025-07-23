@@ -10,9 +10,10 @@ export class ChallengeController {
 
  async createChallenge(req: Request, res: Response) {
     const dto = plainToClass(CreateChallengeDTO, req.body);
+    const currentUserId = req.user.id
 
     try {
-        const challenge = await challengeService.createChallenge(dto);
+        const challenge = await challengeService.createChallenge(dto, currentUserId);
         res.status(201).json(challenge);
 
     } catch(error: any) {
