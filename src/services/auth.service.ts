@@ -51,7 +51,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new Error("Identifiants invalides");
+      throw new Error("Utilisateur non trouvé ");
     }
 
     const checkPassword = bcrypt.compareSync(

@@ -24,6 +24,18 @@ export class Challenge {
 
     @Column()
     objectives!: string;
+    
+    @Column('float', { default: 0 })
+    targetCalories!: number; 
+
+    @Column('int', { default: 0 })
+    requiredSessions!: number; 
+
+    @Column({ type: 'timestamp', nullable: true })
+    startDate!: Date;
+
+    @Column({ type: 'timestamp', nullable: true })
+    endDate!: Date;
 
     @Column() 
     durationMinutes!: number;

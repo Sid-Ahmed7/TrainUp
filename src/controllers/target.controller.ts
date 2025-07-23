@@ -1,6 +1,6 @@
 import { plainToClass } from "class-transformer";
 import { Request, Response } from "express";
-import * as TargetService from "../services/target.service";
+import {TargetService} from "../services/target.service";
 import { CreateTargetDTO } from "../DTO/Target/createTarget.dto";
 import { UpdateTargetDTO } from "../DTO/Target/updateTarget.dto";
 
@@ -37,7 +37,7 @@ export class TargetController {
 
     static async updateTarget(req: Request, res: Response){
         const dto = plainToClass(UpdateTargetDTO, req.body);
-        const id = parseInt(req.params.id as string)
+        const id = Number(req.params.id)
         try {
             const updatedTarget = await TargetService.updateTarget(id, dto);
             if (!updatedTarget) {
@@ -51,7 +51,7 @@ export class TargetController {
     }
 
     static async deleteTarget(req: Request, res: Response){
-    const id = parseInt(req.params.id as string);
+    const id = Number(req.params.id);
     const deletedTarget = await TargetService.deleteTarget(id);
     if (!deletedTarget){
         return res.status(404).json({ message: "Aucune audience trouvé" });

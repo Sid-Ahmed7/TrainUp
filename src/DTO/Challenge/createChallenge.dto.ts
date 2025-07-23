@@ -19,6 +19,18 @@ export class CreateChallengeDTO {
     
     @Expose()
     difficulty!: DifficultyLevel
+    
+    @Expose()
+    startDate?: Date
+
+    @Expose()
+    endDate?: Date
+
+    @Expose()
+    targetCalories!: number
+
+    @Expose()
+    requiredSessions!: number
 
     @Expose()
     exercises!: number[];
@@ -28,4 +40,6 @@ export class CreateChallengeDTO {
 
     @Expose()
     creatorId!: string;
+
+
 }
