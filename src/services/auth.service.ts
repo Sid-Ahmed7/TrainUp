@@ -22,7 +22,7 @@ if (
 const userRepository = AppDataSource.getRepository(User);
 
 export class AuthService {
-  static async register(credentials: Register) {
+   async register(credentials: Register) {
     const existingUser = await userRepository.findOne({
       where: { email: credentials.email },
     });
@@ -45,7 +45,7 @@ export class AuthService {
     return user;
   }
 
-  static async login(credentials: Login) {
+   async login(credentials: Login) {
     const user = await userRepository.findOne({
       where: { email: credentials.email },
     });
@@ -68,12 +68,12 @@ export class AuthService {
     return { token, refreshToken };
   }
 
-  static async generateToken(user: User){
+   async generateToken(user: User){
     const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, {expiresIn: Number(JWT_EXPIRATION),});
     return token;
   }
 
-  static async generateRefreshToken(user: User): Promise<string> {
+   async generateRefreshToken(user: User): Promise<string> {
     const refreshToken = jwt.sign(
       { id: user.id, role: user.role },JWT_SECRET_REFRESH,{ expiresIn: Number(JWT_EXPIRATION_REFRESH) });
 
