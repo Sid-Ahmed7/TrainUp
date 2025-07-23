@@ -13,7 +13,7 @@ const exerciceRepository = AppDataSource.getRepository(TypeExercice);
 
 export class ChallengeService {
     
-    static async createChallenge(dto: CreateChallengeDTO){
+     async createChallenge(dto: CreateChallengeDTO){
 
     const creator = await userRepository.findOneBy({ id: dto.creatorId})
 
@@ -61,7 +61,7 @@ export class ChallengeService {
     return challengeRepository.save(challenge);
 }
 
-    static async updateChallenge(challengeId: number, dto: UpdateChallengeDTO, currentUserId: string) {
+     async updateChallenge(challengeId: number, dto: UpdateChallengeDTO, currentUserId: string) {
         const challenge = await challengeRepository.findOne({ 
             where: {id: challengeId }, relations: ["exercises", "participants", "creator"]})    
         if (!challenge) {
@@ -103,15 +103,15 @@ export class ChallengeService {
         return res;
     }
 
-    static async findAllChallenges() {
+     async findAllChallenges() {
         return challengeRepository.find({relations: ["creator", "exercises", "participants"]});
     }
 
-    static async findChallengeId(challengeId: number) {
+     async findChallengeId(challengeId: number) {
         return challengeRepository.findOne({ where: { id: challengeId }, relations: ["creator", "exercises", "participants"] });
     }
 
-    static async deleteChallenge(challengeId: number, currentUserId: string) {
+     async deleteChallenge(challengeId: number, currentUserId: string) {
 
         const challenge = await challengeRepository.findOne({ 
             where: {id: challengeId }, relations: ["creator"]})    
@@ -126,7 +126,7 @@ export class ChallengeService {
     }
 
 
-    static async shareChallenge(challengeId: number, participantsIds: number[]) {
+     async shareChallenge(challengeId: number, participantsIds: number[]) {
         const challenge = await challengeRepository.findOne({ 
             where: {id: challengeId }, relations: ["participants"]})   
             
@@ -150,7 +150,7 @@ export class ChallengeService {
     }
 
 
-    static async filterChallenges(difficulty?: DifficultyLevel, duration?: number, typeExerciceNames?: string[]) {
+     async filterChallenges(difficulty?: DifficultyLevel, duration?: number, typeExerciceNames?: string[]) {
         let query: any = 
             challengeRepository.createQueryBuilder("challenge")
                             .leftJoinAndSelect("challenge.exercises", "exercise")

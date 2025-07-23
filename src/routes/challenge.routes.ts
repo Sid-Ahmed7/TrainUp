@@ -5,30 +5,31 @@ import { verifyRoles } from "../middlewares/verifyRoles";
 import { Role } from "../enums/Role";
 
 const router = express.Router();
+const challengeController = new ChallengeController()
 
 router.post(
   "/new",
   verifyToken,
   verifyRoles(Role.USER),
-  ChallengeController.createChallenge
+  challengeController.createChallenge
 );
-router.get("/", ChallengeController.getAllChallenge);
+router.get("/", challengeController.getAllChallenge);
 router.get(
   "/search",
   verifyToken,
   verifyRoles(Role.USER),
-  ChallengeController.filteredChallenges
+  challengeController.filteredChallenges
 );
 router.get("/:id", (req, res, next) => {
-  ChallengeController.getChallenge(req, res).catch(next);
+  challengeController.getChallenge(req, res).catch(next);
 });
 
 router.put("/:id", verifyToken, verifyRoles(Role.USER), (req, res, next) => {
-  ChallengeController.updateChallenge(req, res).catch(next);
+  challengeController.updateChallenge(req, res).catch(next);
 });
 
 router.delete("/:id", verifyToken, verifyRoles(Role.USER), (req, res, next) => {
-  ChallengeController.deleteChallenge(req, res).catch(next);
+  challengeController.deleteChallenge(req, res).catch(next);
 });
 
 export default router;

@@ -7,12 +7,13 @@ import { UpdateTrainingSessionDTO } from "../DTO/TrainingSession/update.session"
 import { BadgeService } from "./badge.service";
 import { Between } from "typeorm";
 
+const badgeService = new BadgeService()
 const trainingSessionRepository = AppDataSource.getRepository(TrainingSession);
 const userRepository = AppDataSource.getRepository(User);
 const challengeRepository = AppDataSource.getRepository(Challenge);
 
 export class TrainingSessionService {
-  static async createTrainingSession(dto: CreateTrainingSessionDTO) {
+   async createTrainingSession(dto: CreateTrainingSessionDTO) {
     const user = await userRepository.findOne({ where: { id: dto.userId } });
 
     if (!user) {
@@ -52,7 +53,7 @@ export class TrainingSessionService {
 
     // Vérifier automatiquement les nouveaux badges
     try {
-      await BadgeService.checkAndAwardBadges(dto.userId);
+      await badgeService.checkAndAwardBadges(dto.userId);
     } catch (error) {
       console.log("Erreur lors de la vérification des badges:", error);
       // Ne pas faire échouer la création de session si les badges échouent
@@ -61,7 +62,7 @@ export class TrainingSessionService {
     return savedSession;
   }
 
-  static async findAllSessionByUser(
+   async findAllSessionByUser(
     userId: string,
     startDate?: string,
     endDate?: string
@@ -86,7 +87,7 @@ export class TrainingSessionService {
     });
   }
 
-  static async updateTrainingSession(
+   async updateTrainingSession(
     sessionId: number,
     dto: UpdateTrainingSessionDTO,
     currentUserId: string
@@ -116,7 +117,7 @@ export class TrainingSessionService {
     return trainingSessionRepository.save(session);
   }
 
-  static async deleteTrainingSession(sessionId: number, currentUserId: string) {
+   async deleteTrainingSession(sessionId: number, currentUserId: string) {
     const session = await trainingSessionRepository.findOne({
       where: { id: sessionId },
     });
@@ -131,7 +132,7 @@ export class TrainingSessionService {
     return trainingSessionRepository.remove(session);
   }
 
-  static async getTrainingStats(userId: string, challengeId: number) {
+   async getTrainingStats(userId: string, challengeId: number) {
     if (!userId || !challengeId) {
       throw new Error("Identifiants utilisateur ou challenge manquants");
     }

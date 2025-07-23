@@ -6,18 +6,19 @@ import { Role } from "../enums/Role";
 import { verifyToken } from "../middlewares/auth";
 
 const router = express.Router();
+const categoryController = new CategoryController()
 
 router.post(
   "/new",
   verifyToken,
   verifyRoles(Role.SUPER_ADMIN),
-  CategoryController.createCategory
+  categoryController.createCategory
 );
 
-router.get("/", CategoryController.getAllCategories);
+router.get("/", categoryController.getAllCategories);
 
 router.get("/:id", (req, res, next) => {
-  CategoryController.getCategory(req, res).catch(next);
+  categoryController.getCategory(req, res).catch(next);
 });
 
 router.put(
@@ -25,7 +26,7 @@ router.put(
   verifyToken,
   verifyRoles(Role.SUPER_ADMIN),
   (req, res, next) => {
-    CategoryController.updateCategory(req, res).catch(next);
+    categoryController.updateCategory(req, res).catch(next);
   }
 );
 
@@ -34,7 +35,7 @@ router.delete(
   verifyToken,
   verifyRoles(Role.SUPER_ADMIN),
   (req, res, next) => {
-    CategoryController.deleteCategory(req, res)
+    categoryController.deleteCategory(req, res)
       .then(() => {})
       .catch(next);
   }

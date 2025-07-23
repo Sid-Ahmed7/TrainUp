@@ -4,25 +4,26 @@ import { TargetService } from "../services/target.service";
 import { CreateTargetDTO } from "../DTO/Target/createTarget.dto";
 import { UpdateTargetDTO } from "../DTO/Target/updateTarget.dto";
 
+const targetService = new TargetService()
 export class TargetController {
-  static async createTarget(req: Request, res: Response) {
+   async createTarget(req: Request, res: Response) {
     const dto = plainToClass(CreateTargetDTO, req.body);
 
     try {
-      const target = await TargetService.createTarget(dto);
+      const target = await targetService.createTarget(dto);
       res.status(201).json(target);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
   }
 
-  static async getAllTargets(req: Request, res: Response) {
-    const target = await TargetService.findAllTarget();
+   async getAllTargets(req: Request, res: Response) {
+    const target = await targetService.findAllTarget();
     res.status(200).json(target);
   }
 
-  static async getTarget(req: Request, res: Response) {
-    const target = await TargetService.findTargetById(Number(req.params.id));
+   async getTarget(req: Request, res: Response) {
+    const target = await targetService.findTargetById(Number(req.params.id));
 
     if (!target) {
       return res.status(404).json({ message: "Aucune audience trouvé" });
@@ -31,11 +32,11 @@ export class TargetController {
     res.status(200).json(target);
   }
 
-  static async updateTarget(req: Request, res: Response) {
+   async updateTarget(req: Request, res: Response) {
     const dto = plainToClass(UpdateTargetDTO, req.body);
-    const id = parseInt(req.params.id as string);
+    const id = Number(req.params.id);
     try {
-      const updatedTarget = await TargetService.updateTarget(id, dto);
+      const updatedTarget = await targetService.updateTarget(id, dto);
       if (!updatedTarget) {
         return res.status(404).json({ message: "Aucune audience trouvé" });
       }
@@ -45,9 +46,9 @@ export class TargetController {
     }
   }
 
-  static async deleteTarget(req: Request, res: Response) {
+   async deleteTarget(req: Request, res: Response) {
     const id = parseInt(req.params.id as string);
-    const deletedTarget = await TargetService.deleteTarget(id);
+    const deletedTarget = await targetService.deleteTarget(id);
     if (!deletedTarget) {
       return res.status(404).json({ message: "Aucune audience trouvé" });
     }

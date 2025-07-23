@@ -4,12 +4,13 @@ import { CreateTrainingSessionDTO } from "../DTO/TrainingSession/createSession.d
 import {TrainingSessionService} from "../services/trainingSession.service"
 import { UpdateTrainingSessionDTO } from "../DTO/TrainingSession/update.session";
 
+const trainingSession = new TrainingSessionService()
 export class TrainingSessionController {
 
     async createSession(req: Request, res: Response){
         try {
             const dto = plainToClass(CreateTrainingSessionDTO, req.body)
-            const session = await TrainingSessionService.createTrainingSession(dto)
+            const session = await trainingSession.createTrainingSession(dto)
             res.status(201).json(session)
         } catch (error) {
         res.status(400).json({ error: (error as Error).message });
@@ -25,7 +26,7 @@ export class TrainingSessionController {
                 if (!userId) {
                     return res.status(401).json({ error: "Utilisateur non authentifié" });
                 }
-                const sessions = await TrainingSessionService.findAllSessionByUser(userId, startDate,endDate)
+                const sessions = await trainingSession.findAllSessionByUser(userId, startDate,endDate)
                 res.status(200).json(sessions)
                 return
             } catch (error) {
@@ -37,7 +38,7 @@ export class TrainingSessionController {
         const id = Number(req.params.id as string)
         const currentUserId = req.user.id;
         try {
-            const updatedSession = await TrainingSessionService.updateTrainingSession(id, dto, currentUserId);
+            const updatedSession = await trainingSession.updateTrainingSession(id, dto, currentUserId);
             if (!updatedSession) {
                 res.status(200).json({ message: "Aucune session trouvé"})
                 return
@@ -54,7 +55,7 @@ export class TrainingSessionController {
     const id = Number(req.params.id as string);
     const currentUserId = req.user.id;
 
-    await TrainingSessionService.deleteTrainingSession(id,currentUserId);
+    await trainingSession.deleteTrainingSession(id,currentUserId);
     res.status(204).send();
     };
 
@@ -62,7 +63,7 @@ export class TrainingSessionController {
         try {
             const userId = req.user.id
             const challengeId = Number(req.params.challengeId)
-            const stats = await TrainingSessionService.getTrainingStats(userId, challengeId)
+            const stats = await trainingSession.getTrainingStats(userId, challengeId)
         
             res.status(200).json(stats)
             return        

@@ -7,7 +7,7 @@ const targetRepository = AppDataSource.getRepository(Target);
 
 export class TargetService {
 
-    static async createTarget(target: CreateTargetDTO){
+     async createTarget(target: CreateTargetDTO){
 
         const existing = await targetRepository.findOneBy({ name: target.name });
 
@@ -17,7 +17,7 @@ export class TargetService {
         return targetRepository.save(targetRepository.create(target))
     }
 
-    static async updateTarget(targetId: number, target: UpdateTargetDTO){
+     async updateTarget(targetId: number, target: UpdateTargetDTO){
 
     const updatedTarget = await targetRepository.findOneBy({id: targetId })
     if(!updatedTarget) {
@@ -28,15 +28,15 @@ export class TargetService {
           return res;
 }   
 
-    static async  findAllTarget() {
+     async  findAllTarget() {
         return targetRepository.find()
     }
 
-    static async findTargetById(targetId: number){
+     async findTargetById(targetId: number){
         return targetRepository.findOneBy({ id: targetId })
     }
 
-    static async  deleteTarget(targetId: number) {
+     async  deleteTarget(targetId: number) {
         const res = await targetRepository.delete(targetId);
         return res.affected !== 0;
     }   

@@ -5,7 +5,7 @@ import { Category } from "../entities/Category";
 
 const categoryRepository = AppDataSource.getRepository(Category);
 export class CategoryService {
-    static async createCategory(dto: CreateCategoryDTO) {
+     async createCategory(dto: CreateCategoryDTO) {
         const existingCategory = await categoryRepository.findOne({
             where: { name: dto.name}
         })
@@ -17,7 +17,7 @@ export class CategoryService {
         return await categoryRepository.save(category);
     }
 
-    static async updateCategory(categoryId: number, dto: UpdateCategoryDTO)  {
+     async updateCategory(categoryId: number, dto: UpdateCategoryDTO)  {
     const updatedCategory = await categoryRepository.findOneBy({id: categoryId })
     if(!updatedCategory) {
         throw new Error(`La catégorie avec l'ID ${categoryId} introuvable.`);
@@ -30,11 +30,11 @@ export class CategoryService {
     }   
 
 
-    static async findAllCategories()  {
+     async findAllCategories()  {
             return categoryRepository.find()
     }
 
-    static async findCategoryById(categoryId: number){
+     async findCategoryById(categoryId: number){
       const category = await categoryRepository.findOneBy({ id: categoryId });
       if (!category) {
         throw new Error(`Catégorie avec l'ID ${categoryId} non trouvée.`);
@@ -42,7 +42,7 @@ export class CategoryService {
       return category;
     }
 
-  static async deleteCategory(categoryId: number) {
+   async deleteCategory(categoryId: number) {
     const category = await categoryRepository.findOneBy({ id: categoryId });
     if (!category) {
       throw new Error(`Catégorie avec l'ID ${categoryId} non trouvée.`);

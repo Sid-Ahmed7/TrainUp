@@ -6,18 +6,19 @@ import { verifyToken } from "../middlewares/auth";
 import { Role } from "../enums/Role";
 
 const router = express.Router();
+const targetController = new TargetController()
 
 router.post(
   "/new",
   verifyToken,
   verifyRoles(Role.SUPER_ADMIN),
-  TargetController.createTarget
+  targetController.createTarget
 );
 
-router.get("/", TargetController.getAllTargets);
+router.get("/", targetController.getAllTargets);
 
 router.get("/:id", (req, res, next) => {
-  TargetController.getTarget(req, res).catch(next);
+  targetController.getTarget(req, res).catch(next);
 });
 
 router.put(
@@ -25,7 +26,7 @@ router.put(
   verifyToken,
   verifyRoles(Role.SUPER_ADMIN),
   (req, res, next) => {
-    TargetController.updateTarget(req, res).catch(next);
+    targetController.updateTarget(req, res).catch(next);
   }
 );
 
@@ -34,7 +35,7 @@ router.delete(
   verifyToken,
   verifyRoles(Role.SUPER_ADMIN),
   (req, res, next) => {
-    TargetController.deleteTarget(req, res).catch(next);
+    targetController.deleteTarget(req, res).catch(next);
   }
 );
 
