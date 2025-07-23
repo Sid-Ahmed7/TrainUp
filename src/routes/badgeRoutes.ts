@@ -18,6 +18,10 @@ router.post("/nouveau", verifyToken, verifyRoles(Role.SUPER_ADMIN), (req, res, n
     BadgeController.createBadge(req, res).catch(next);
 });
 
+router.put("/:id", verifyToken, verifyRoles(Role.SUPER_ADMIN), (req, res, next) => {
+    BadgeController.updateBadge(req, res).catch(next);
+});
+
 router.delete("/:id", verifyToken, verifyRoles(Role.SUPER_ADMIN), (req, res, next) => {
     BadgeController.deleteBadge(req, res).catch(next);
 });
