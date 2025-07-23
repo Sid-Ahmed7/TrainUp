@@ -4,11 +4,11 @@ import { verifyRefreshToken, verifyToken } from '../middlewares/auth';
 
 
 const router = express.Router();
-
-router.post("/register", AuthController.register)
-router.post("/login", AuthController.login)
+const authController = new AuthController();
+router.post("/register", (req, res) => authController.register(req, res));
+router.post("/login", (req, res) => authController.login(req, res));
 router.post("/refresh-token", verifyRefreshToken, (req, res, next) => {
-	Promise.resolve(AuthController.refreshToken(req, res)).catch(next);
+	Promise.resolve(authController.refreshToken(req, res)).catch(next);
 })
 
 export default router;
