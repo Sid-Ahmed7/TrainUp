@@ -54,13 +54,13 @@ export class TrainingSessionService {
     const savedSession = await trainingSessionRepository.save(session);
 
      try {
-       await badgeService.checkAndAwardBadges(dto.userId);
+       await badgeService.checkAndAwardBadges(currentUserId);
      } catch (error) {
        console.log("Erreur lors de la vérification des badges:", error);
      }
 
      try {
-       await rewardService.checkAndAwardRewards(dto.userId);
+       await rewardService.checkAndAwardRewards(currentUserId);
      } catch (error) {
        console.log("Erreur lors de la vérification des récompenses:", error);
      }
