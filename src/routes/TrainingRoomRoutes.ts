@@ -6,7 +6,6 @@ import { Role } from "../enums/Role";
 
 const router = express.Router();
 const trainingRoomController = new TrainingRoomController();
-// Création d'une salle (OWNER et SUPER_ADMIN)
 router.post(
   "/new",
   verifyToken,
@@ -24,22 +23,18 @@ router.post(
   }
 );
 
-// Liste des salles (tous utilisateurs authentifiés)
 router.get("/", verifyToken, (req, res, next) => {
   trainingRoomController.getRooms(req, res).catch(next);
 });
 
-// Détails d'une salle par ID
 router.get("/:id", verifyToken, (req, res, next) => {
   trainingRoomController.getRoomById(req, res).catch(next);
 });
 
-// Modification d'une salle (propriétaire ou SUPER_ADMIN)
 router.put("/:id", verifyToken, (req, res, next) => {
   trainingRoomController.updateRoom(req, res).catch(next);
 });
 
-// Suppression d'une salle (SUPER_ADMIN uniquement)
 router.delete(
   "/:id",
   verifyToken,
@@ -49,7 +44,6 @@ router.delete(
   }
 );
 
-// Approbation d'une salle (SUPER_ADMIN uniquement)
 router.post(
   "/:id/approve",
   verifyToken,
@@ -59,7 +53,6 @@ router.post(
   }
 );
 
-// Rejet d'une salle (SUPER_ADMIN uniquement)
 router.post(
   "/:id/reject",
   verifyToken,
