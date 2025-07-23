@@ -4,9 +4,9 @@ import { TargetService } from "../services/target.service";
 import { CreateTargetDTO } from "../DTO/Target/createTarget.dto";
 import { UpdateTargetDTO } from "../DTO/Target/updateTarget.dto";
 
-const targetService = new TargetService()
+const targetService = new TargetService();
 export class TargetController {
-   async createTarget(req: Request, res: Response) {
+  async createTarget(req: Request, res: Response) {
     const dto = plainToClass(CreateTargetDTO, req.body);
 
     try {
@@ -17,12 +17,12 @@ export class TargetController {
     }
   }
 
-   async getAllTargets(req: Request, res: Response) {
+  async getAllTargets(req: Request, res: Response) {
     const target = await targetService.findAllTarget();
     res.status(200).json(target);
   }
 
-   async getTarget(req: Request, res: Response) {
+  async getTarget(req: Request, res: Response) {
     const target = await targetService.findTargetById(Number(req.params.id));
 
     if (!target) {
@@ -32,7 +32,7 @@ export class TargetController {
     res.status(200).json(target);
   }
 
-   async updateTarget(req: Request, res: Response) {
+  async updateTarget(req: Request, res: Response) {
     const dto = plainToClass(UpdateTargetDTO, req.body);
     const id = Number(req.params.id);
     try {
@@ -46,7 +46,7 @@ export class TargetController {
     }
   }
 
-   async deleteTarget(req: Request, res: Response) {
+  async deleteTarget(req: Request, res: Response) {
     const id = parseInt(req.params.id as string);
     const deletedTarget = await targetService.deleteTarget(id);
     if (!deletedTarget) {

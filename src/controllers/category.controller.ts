@@ -42,7 +42,7 @@ export class CategoryController {
         const updatedCategory = await categoryService.updateCategory(id, dto);
         if (!updatedCategory) {
             return res.status(404).json({ message: "Aucune category trouvé"})
-        
+    
         }
         return res.status(200).json(updatedCategory);
     } catch(error: any) {

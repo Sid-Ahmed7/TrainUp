@@ -15,13 +15,15 @@ export class TargetService {
     return await targetRepository.save(targetRepository.create(target));
   }
 
-  async updateTarget(targetId: number, target: UpdateTargetDTO) {
-    const updatedTarget = await targetRepository.findOneBy({ id: targetId });
-    if (!updatedTarget) {
-      throw new Error("Audience non trouvée");
+  async updateTarget(targetId: number, dto: UpdateTargetDTO) {
+    const targetToUpdate = await targetRepository.findOneBy({ id: targetId });
+    if (!targetToUpdate) {
+      throw new Error(`Audience avec l'ID ${targetId} introuvable.`);
     }
-    const res = await targetRepository.update(targetId, target);
-
+    if (dto.name !== undefined) {
+      targetToUpdate.name = dto.name;
+    }
+    const res = await targetRepository.save(targetToUpdate);
     return res;
   }
 
