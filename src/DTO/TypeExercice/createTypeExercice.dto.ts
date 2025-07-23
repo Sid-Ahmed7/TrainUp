@@ -3,7 +3,6 @@ import { DifficultyLevel } from "../../enums/DifficultyLevel";
 import { Environment } from "../../enums/Environment";
 import { CreateTypeExerciceEquipmentDTO } from "../TypeExerciceEquipment/createTypeExerciceEquipment.dto";
 
-
 export class CreateTypeExerciceDTO {
   @Expose()
   name!: string;
@@ -21,11 +20,11 @@ export class CreateTypeExerciceDTO {
   difficultyLevel!: DifficultyLevel;
 
   @Expose()
-  @Type(() => CreateTypeExerciceEquipmentDTO)
-  equipments!: CreateTypeExerciceEquipmentDTO[];
+  environment!: Environment;
 
   @Expose()
-  environment!: Environment;
+  @Type(() => CreateTypeExerciceEquipmentDTO)
+  equipments!: CreateTypeExerciceEquipmentDTO[];
 
   @Expose()
   instructions!: string;
