@@ -92,77 +92,44 @@ export const updateTypeExercice = async (
     return null;
   }
 
-  const updateExercice: Partial<TypeExercice> = {};
-
-  if (dto.name !== undefined) {
-    updateExercice.name = dto.name;
-  }
-  if (dto.description !== undefined) {
-    updateExercice.description = dto.description;
-  }
-  if (dto.targetMuscles !== undefined) {
-    updateExercice.targetMuscles = dto.targetMuscles;
-  }
-  if (dto.difficultyLevel !== undefined) {
-    updateExercice.difficultyLevel = dto.difficultyLevel;
-  }
-  if (dto.environment !== undefined) {
-    updateExercice.environment = dto.environment;
-  }
-  if (dto.instructions !== undefined) {
-    updateExercice.instructions = dto.instructions;
-  }
-  if (dto.tips !== undefined) {
-    updateExercice.tips = dto.tips;
-  }
-  if (dto.imageUrl !== undefined) {
-    updateExercice.imageUrl = dto.imageUrl;
-  }
-  if (dto.usageCount !== undefined) {
-    updateExercice.usageCount = dto.usageCount;
-  }
-  if (dto.averageRating !== undefined) {
-    updateExercice.averageRating = dto.averageRating;
-  }
-  if (dto.averageSuccessRate !== undefined) {
-    updateExercice.averageSuccessRate = dto.averageSuccessRate;
-  }
-  if (dto.duration !== undefined) {
-    updateExercice.duration = dto.duration;
-  }
-  if (dto.averageCalories !== undefined) {
-    updateExercice.averageCalories = dto.averageCalories;
-  }
-  if (dto.repetitionsRecommended !== undefined) {
-    updateExercice.repetitionsRecommended = dto.repetitionsRecommended;
-  }
-  if (dto.durationPerRep !== undefined) {
-    updateExercice.durationPerRep = dto.durationPerRep;
-  }
+  if (dto.name !== undefined) exo.name = dto.name;
+  if (dto.description !== undefined) exo.description = dto.description;
+  if (dto.targetMuscles !== undefined) exo.targetMuscles = dto.targetMuscles;
+  if (dto.difficultyLevel !== undefined)
+    exo.difficultyLevel = dto.difficultyLevel;
+  if (dto.environment !== undefined) exo.environment = dto.environment;
+  if (dto.instructions !== undefined) exo.instructions = dto.instructions;
+  if (dto.tips !== undefined) exo.tips = dto.tips;
+  if (dto.imageUrl !== undefined) exo.imageUrl = dto.imageUrl;
+  if (dto.usageCount !== undefined) exo.usageCount = dto.usageCount;
+  if (dto.averageRating !== undefined) exo.averageRating = dto.averageRating;
+  if (dto.averageSuccessRate !== undefined)
+    exo.averageSuccessRate = dto.averageSuccessRate;
+  if (dto.duration !== undefined) exo.duration = dto.duration;
+  if (dto.averageCalories !== undefined)
+    exo.averageCalories = dto.averageCalories;
+  if (dto.repetitionsRecommended !== undefined)
+    exo.repetitionsRecommended = dto.repetitionsRecommended;
+  if (dto.durationPerRep !== undefined) exo.durationPerRep = dto.durationPerRep;
 
   if (dto.categoryId !== undefined) {
     const category = await categoryRepository.findOneBy({ id: dto.categoryId });
-    if (!category) {
-      throw new Error("Categorie non trouvé");
-    }
-    updateExercice.category = category;
+    if (!category) throw new Error("Categorie non trouvé");
+    exo.category = category;
   }
-
   if (dto.audienceIds !== undefined) {
-    const audiences = dto.audienceIds.length
+    exo.audience = dto.audienceIds.length
       ? await targetRepository.find({ where: { id: In(dto.audienceIds) } })
       : [];
-    updateExercice.audience = audiences;
   }
-
   if (dto.complementaryExerciceIds !== undefined) {
-    const complementaryExercices = dto.complementaryExerciceIds.length
+    exo.complementaryExercice = dto.complementaryExerciceIds.length
       ? await typeExerciceRepository.find({
           where: { id: In(dto.complementaryExerciceIds) },
         })
       : [];
-    updateExercice.complementaryExercice = complementaryExercices;
   }
+
   if (dto.equipments !== undefined) {
     await typeExerciceEquipmentRepository.delete({
       exercice: { id: exerciceId },
@@ -175,10 +142,14 @@ export const updateTypeExercice = async (
         )
       )
     );
-    updateExercice.equipments = createdEquipments;
+    exo.equipments = createdEquipments;
   }
 
-  const res = await typeExerciceRepository.save(updateExercice);
+  const res = await typeExerciceRepository.save(exo);
+  // Pour supprimer l'entite de liaison complete
+  if (res.equipments && Array.isArray(res.equipments)) {
+    res.equipments = res.equipments.map((teq: any) => teq.equipment);
+  }
   return res;
 };
 
