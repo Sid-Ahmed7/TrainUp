@@ -8,6 +8,7 @@ import TraniningRoomRoutes from "./TrainingRoomRoutes";
 import challengeRoutes from "./challenge.routes";
 import trainingSession from "./trainingSession.routes";
 import badgeRoutes from "./badgeRoutes";
+import rewardRoutes from "./rewardRoutes";
 export {
   authRoutes,
   categoryRoutes,
@@ -19,4 +20,5 @@ export {
   trainingSession,
   TraniningRoomRoutes,
   badgeRoutes,
+  rewardRoutes,
 };
