@@ -58,7 +58,7 @@ router.get("/user/:userId", verifyToken, (req, res, next) => {
   badgeController.getUserBadges(req, res).catch(next);
 });
 
-router.get("/check", verifyToken, (req, res, next) => {
+router.post("/check", verifyToken, (req, res, next) => {
   badgeController.checkAndAwardBadges(req, res).catch(next);
 });
 

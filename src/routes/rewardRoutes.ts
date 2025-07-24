@@ -63,7 +63,7 @@ router.patch("/use/:userRewardId", verifyToken, (req, res, next) => {
   rewardController.markRewardAsUsed(req, res).catch(next);
 });
 
-router.get("/check", verifyToken, (req, res, next) => {
+router.post("/check", verifyToken, (req, res, next) => {
   rewardController.checkAndAwardRewards(req, res).catch(next);
 });
 
