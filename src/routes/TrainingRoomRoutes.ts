@@ -31,14 +31,19 @@ router.get("/:id", verifyToken, (req, res, next) => {
   trainingRoomController.getRoomById(req, res).catch(next);
 });
 
-router.put("/:id", verifyToken, (req, res, next) => {
-  trainingRoomController.updateRoom(req, res).catch(next);
-});
+router.put(
+  "/:id",
+  verifyToken,
+  verifyRoles(Role.SUPER_ADMIN, Role.OWNER),
+  (req, res, next) => {
+    trainingRoomController.updateRoom(req, res).catch(next);
+  }
+);
 
 router.delete(
   "/:id",
   verifyToken,
-  verifyRoles(Role.SUPER_ADMIN),
+  verifyRoles(Role.SUPER_ADMIN, Role.OWNER),
   (req, res, next) => {
     trainingRoomController.deleteRoom(req, res).catch(next);
   }
