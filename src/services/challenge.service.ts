@@ -12,21 +12,19 @@ const userRepository = AppDataSource.getRepository(User);
 const exerciceRepository = AppDataSource.getRepository(TypeExercice);
 
 export class ChallengeService {
-    
-     async createChallenge(dto: CreateChallengeDTO, creatorId: string){
-
-    const creator = await userRepository.findOneBy({ id: creatorId})
+  async createChallenge(dto: CreateChallengeDTO, creatorId: string) {
+    const creator = await userRepository.findOneBy({ id: creatorId });
 
     if (!creator) {
       throw new Error("le créateur du challenge n'existe pas");
     }
 
     const existingChallenge = await challengeRepository.findOne({
-        where: {
-            title: dto.title,
-            creator: {id: creatorId}
-        }
-    })
+      where: {
+        title: dto.title,
+        creator: { id: creatorId },
+      },
+    });
 
     if (existingChallenge) {
       throw new Error("Un challenge avec ce titre existe déjà.");
@@ -59,7 +57,12 @@ export class ChallengeService {
       requiredSessions: dto.requiredSessions,
     });
 
-    return challengeRepository.save(challenge);
+    const savedChallenge = await challengeRepository.save(challenge);
+
+    return {
+      ...savedChallenge,
+      creator: { id: savedChallenge.creator.id },
+    };
   }
 
   async updateChallenge(
@@ -129,20 +132,38 @@ export class ChallengeService {
       challenge.requiredSessions = dto.requiredSessions;
     }
     const res = await challengeRepository.save(challenge);
-    return res;
+    return {
+      ...res,
+      creator: { id: res.creator.id },
+    };
   }
 
   async findAllChallenges() {
-    return challengeRepository.find({
+    const challenges = await challengeRepository.find({
       relations: ["creator", "exercises", "participants"],
     });
+
+    const result = challenges.map((challenge) => ({
+      ...challenge,
+      creator: { id: challenge.creator.id },
+    }));
+
+    return result;
   }
 
   async findChallengeId(challengeId: number) {
-    return challengeRepository.findOne({
+    const challenge = await challengeRepository.findOne({
       where: { id: challengeId },
       relations: ["creator", "exercises", "participants"],
     });
+    if (!challenge) {
+      return null;
+    }
+
+    return {
+      ...challenge,
+      creator: { id: challenge.creator.id },
+    };
   }
 
   async deleteChallenge(challengeId: number, currentUserId: string) {
@@ -216,6 +237,12 @@ export class ChallengeService {
     }
 
     const challenges = await query.getMany();
-    return challenges;
+
+    const result = challenges.map((challenge: Challenge) => ({
+      ...challenge,
+      creator: { id: challenge.creator.id },
+    }));
+
+    return result;
   }
 }
