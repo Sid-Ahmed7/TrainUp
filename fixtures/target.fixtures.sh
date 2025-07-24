@@ -25,7 +25,7 @@ if [ -z "$ADMIN_TOKEN" ]; then
 fi
 
 echo "Admin token: $ADMIN_TOKEN"
-
+# Fixtures pour les targets
 targets=(
   '{"name": "Jeune"}'
   '{"name": "Adulte"}'

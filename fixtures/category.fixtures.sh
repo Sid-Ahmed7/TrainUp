@@ -24,7 +24,7 @@ fi
 
 echo "Admin token: $ADMIN_TOKEN"
 
-# Exemple d'appel protégé avec le token admin (catégories)
+# Fixtures pour les categories
 categories=(
   '{"name": "Musculation"}'
   '{"name": "Cardio"}'

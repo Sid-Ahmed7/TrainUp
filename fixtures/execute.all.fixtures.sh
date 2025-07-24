@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR="$(dirname "$0")"
-
+# Execution de toutes les fixtures d'un seul coup
 bash "$DIR/category.fixtures.sh"
 bash "$DIR/badge.fixtures.sh"
 bash "$DIR/rewards.fixtures.sh"

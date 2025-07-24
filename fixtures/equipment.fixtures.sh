@@ -26,7 +26,7 @@ fi
 
 
 echo "Admin token: $ADMIN_TOKEN"
-
+# Fixtures pour les equipments
 equipments=(
   '{"name": "Halteres", "description": "Poids libres utilises pour la musculation.", "category": "Musculation"}'
   '{"name": "Tapis de yoga", "description": "Tapis antiderapant utilise pour le yoga.", "category": "Yoga"}'
