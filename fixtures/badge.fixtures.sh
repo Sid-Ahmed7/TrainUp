@@ -1,5 +1,5 @@
 #!/bin/bash
-ENV_PATH="$(dirname "$0")/../../.env"
+ENV_PATH="$(dirname "$0")/../.env"
 if [ -f "$ENV_PATH" ]; then
     source "$ENV_PATH"
 else

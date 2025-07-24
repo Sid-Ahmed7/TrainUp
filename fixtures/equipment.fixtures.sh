@@ -2,7 +2,7 @@
 export LANG="fr_FR.UTF-8"
 export LC_ALL="fr_FR.UTF-8"
 
-ENV_PATH="$(dirname "$0")/../../.env"
+ENV_PATH="$(dirname "$0")/../.env"
 if [ -f "$ENV_PATH" ]; then
     source "$ENV_PATH"
 else
