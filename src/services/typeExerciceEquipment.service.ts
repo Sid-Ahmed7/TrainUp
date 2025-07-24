@@ -2,6 +2,7 @@ import AppDataSource from "../config/db";
 import { Equipment } from "../entities/Equipment";
 import { TypeExercice } from "../entities/TypeExercice";
 import { TypeExerciceEquipment } from "../entities/TypeExerciceEquipment";
+import { AppError } from "../utils/AppError";
 
 const typeExerciceEquipmentRepository = AppDataSource.getRepository(
   TypeExerciceEquipment
@@ -9,14 +10,14 @@ const typeExerciceEquipmentRepository = AppDataSource.getRepository(
 const typeExerciceRepository = AppDataSource.getRepository(TypeExercice);
 const equipementRepository = AppDataSource.getRepository(Equipment);
 
-export const createTypeExerciceEquipmentWithOutCustom = async (
-  exerciceId: number,
-  equipementId: number
-) => {
+
+export class TypeExerciceEquipmentService {
+
+  async createTypeExerciceEquipmentWithOutCustom(exerciceId: number, equipementId: number) {
   const exercice = await typeExerciceRepository.findOneBy({ id: exerciceId });
   const equipment = await equipementRepository.findOneBy({ id: equipementId });
   if (!exercice || !equipment) {
-    throw new Error("Exercice ou Equipement non trouvé");
+    throw new AppError("Exercice ou Equipement non trouvé", 404);
   }
 
   const saved = await typeExerciceEquipmentRepository.save(
@@ -28,14 +29,12 @@ export const createTypeExerciceEquipmentWithOutCustom = async (
     equipmentId: equipment.id,
   };
 };
-export const createTypeExerciceEquipment = async (
-  exerciceId: number,
-  equipementId: number
-) => {
+
+  async createTypeExerciceEquipment (exerciceId: number,equipementId: number) {
   const exercice = await typeExerciceRepository.findOneBy({ id: exerciceId });
   const equipment = await equipementRepository.findOneBy({ id: equipementId });
   if (!exercice || !equipment) {
-    throw new Error("Exercice ou Equipement non trouvé");
+    throw new AppError("Exercice ou Equipement non trouvé", 404);
   }
 
   return await typeExerciceEquipmentRepository.save(
@@ -43,13 +42,13 @@ export const createTypeExerciceEquipment = async (
   );
 };
 
-export const getTypeExerciceEquipment = () => {
+  async getTypeExerciceEquipment() {
   return typeExerciceEquipmentRepository.find({
     relations: ["exercice", "equipment"],
   });
 };
 
-export const getEquipmentForExercice = async (exerciceId: number) => {
+  async getEquipmentForExercice(exerciceId: number){
   const equipmentOfExercice = await typeExerciceEquipmentRepository.find({
     where: { exercice: { id: exerciceId } },
     relations: ["equipment"],
@@ -57,7 +56,7 @@ export const getEquipmentForExercice = async (exerciceId: number) => {
   return equipmentOfExercice.map((eq) => eq.equipment);
 };
 
-export const deleteByEquipmentId = async (equipmentId: number) => {
+  async deleteByEquipmentId(equipmentId: number) {
   const toDelete = await typeExerciceEquipmentRepository.find({
     where: { equipment: { id: equipmentId } },
     select: ["id"],
@@ -72,7 +71,7 @@ export const deleteByEquipmentId = async (equipmentId: number) => {
   return res.affected !== 0;
 };
 
-export const deleteByExerciceId = async (exerciceId: number) => {
+  async deleteByExerciceId(exerciceId: number) {
   const toDelete = await typeExerciceEquipmentRepository.find({
     where: { exercice: { id: exerciceId } },
     select: ["id"],
@@ -92,3 +91,6 @@ export const deleteByExerciceId = async (exerciceId: number) => {
 
   return res.affected !== 0;
 };
+
+
+}

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
-import { TrainingRoomService } from "../services/trainingRoom.service";
+import { TrainingRoomService } from "../services/TrainingRoom.service";
 import { RoomStatus } from "../entities/TrainingRoom";
+import { AppError } from "../utils/AppError";
 
 const trainingRoomService = new TrainingRoomService();
 
@@ -18,7 +19,12 @@ export class TrainingRoomController {
       };
       res.status(201).json(response);
     } catch (error: any) {
-      res.status(400).json({ error: error.message });
+       if(error instanceof AppError) {
+        res.status(error.status).json({error: error.message})
+        return
+      }
+      res.status(500).json({ error: "Erreur lors de la création d'une salle d'entraînement" });
+      return
     }
   };
 
@@ -28,7 +34,12 @@ export class TrainingRoomController {
       const room = await trainingRoomService.assignTrainingRoom(roomId, userId);
       res.json(room);
     } catch (error: any) {
-      res.status(400).json({ error: error.message });
+       if(error instanceof AppError) {
+        res.status(error.status).json({error: error.message})
+        return
+      }
+      res.status(500).json({ error: "Erreur lors de la l'assignation d'une salle d'entraînement" });
+      return
     }
   };
 
@@ -40,7 +51,12 @@ export class TrainingRoomController {
       );
       res.json(rooms);
     } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      if(error instanceof AppError) {
+        res.status(error.status).json({error: error.message})
+        return
+      }
+      res.status(500).json({ error: "Erreur lors de la récupération des salles d'entraînements" });
+      return
     }
   };
 
@@ -51,7 +67,12 @@ export class TrainingRoomController {
       );
       res.json(room);
     } catch (error: any) {
-      res.status(404).json({ error: error.message });
+      if(error instanceof AppError) {
+        res.status(error.status).json({error: error.message})
+        return
+      }
+      res.status(500).json({ error: "Erreur lors de la récupération d'une salle d'entraînement" });
+      return
     }
   };
 
@@ -66,7 +87,12 @@ export class TrainingRoomController {
       );
       res.json(room);
     } catch (error: any) {
-      res.status(400).json({ error: error.message });
+       if(error instanceof AppError) {
+        res.status(error.status).json({error: error.message})
+        return
+      }
+      res.status(500).json({ error: "Erreur lors de la mise à jour d'une salle d'entraînement" });
+      return
     }
   };
 
@@ -77,7 +103,12 @@ export class TrainingRoomController {
       );
       res.json(room);
     } catch (error: any) {
-      res.status(400).json({ error: error.message });
+       if(error instanceof AppError) {
+        res.status(error.status).json({error: error.message})
+        return
+      }
+      res.status(500).json({ error: "Erreur lors de l'approbation de la salle d'entraînement" });
+      return
     }
   };
 
@@ -88,7 +119,12 @@ export class TrainingRoomController {
       );
       res.json(room);
     } catch (error: any) {
-      res.status(400).json({ error: error.message });
+       if(error instanceof AppError) {
+        res.status(error.status).json({error: error.message})
+        return
+      }
+      res.status(500).json({ error: "Erreur lors du rejet de la salle d'entraînement" });
+      return
     }
   };
 
@@ -97,7 +133,12 @@ export class TrainingRoomController {
       await trainingRoomService.deleteTrainingRoom(Number(req.params.id));
       res.status(204).send();
     } catch (error: any) {
-      res.status(400).json({ error: error.message });
+      if(error instanceof AppError) {
+        res.status(error.status).json({error: error.message})
+        return
+      }
+      res.status(500).json({ error: "Erreur lors de la suppression d'une salle d'entrainement" });
+      return
     }
   };
 }

@@ -6,6 +6,7 @@ import { UserReward } from "../entities/UserReward";
 import { User } from "../entities/User";
 import { TrainingSession } from "../entities/TrainingSession";
 import { UserBadge } from "../entities/UserBadge";
+import { AppError } from "../utils/AppError";
 
 const rewardRepository = AppDataSource.getRepository(Reward);
 const userRewardRepository = AppDataSource.getRepository(UserReward);
@@ -21,7 +22,7 @@ export class RewardService {
         });
 
         if (existingReward) {
-            throw new Error("Une récompense avec ce nom existe déjà");
+            throw new AppError("Une récompense avec ce nom existe déjà", 409);
         }
 
         const reward = rewardRepository.create({
@@ -55,7 +56,7 @@ export class RewardService {
         });
 
         if (!reward) {
-            throw new Error("Récompense introuvable");
+            throw new AppError("Récompense introuvable", 404);
         }
 
         if (dto.name && dto.name !== reward.name) {
@@ -64,7 +65,7 @@ export class RewardService {
             });
 
             if (existingReward) {
-                throw new Error("Une récompense avec ce nom existe déjà");
+                throw new AppError("Une récompense avec ce nom existe déjà", 409);
             }
         }
 
@@ -83,7 +84,7 @@ export class RewardService {
         const reward = await rewardRepository.findOne({ where: { id: rewardId } });
         
         if (!reward) {
-            throw new Error("Récompense introuvable");
+            throw new AppError("Récompense introuvable", 404);
         }
 
         return rewardRepository.delete(rewardId);
@@ -95,7 +96,7 @@ export class RewardService {
         });
 
         if (existingUserReward) {
-            throw new Error("L'utilisateur possède déjà cette récompense");
+            throw new AppError("L'utilisateur possède déjà cette récompense", 409);
         }
 
         const userReward = userRewardRepository.create({
@@ -121,11 +122,11 @@ export class RewardService {
         });
 
         if (!userReward) {
-            throw new Error("Récompense introuvable ou non attribuée à cet utilisateur");
+            throw new AppError("Récompense introuvable ou non attribuée à cet utilisateur", 404);
         }
 
         if (userReward.isUsed) {
-            throw new Error("Cette récompense a déjà été utilisée");
+            throw new AppError("Cette récompense a déjà été utilisée", 409);
         }
 
         userReward.isUsed = true;
@@ -157,7 +158,7 @@ export class RewardService {
                         shouldAward.reason
                     );
                     newRewards.push(newReward);
-                } catch (error) {
+                } catch (AppError) {
                 }
             }
         }

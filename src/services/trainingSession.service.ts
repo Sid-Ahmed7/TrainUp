@@ -7,6 +7,7 @@ import { UpdateTrainingSessionDTO } from "../DTO/TrainingSession/update.session"
 import { BadgeService } from "./badge.service";
 import { RewardService } from "./rewardService";
 import { Between } from "typeorm";
+import { AppError } from "../utils/AppError";
 
 const badgeService = new BadgeService();
 const rewardService = new RewardService();
@@ -19,7 +20,7 @@ export class TrainingSessionService {
     const user = await userRepository.findOne({ where: { id: currentUserId } });
 
     if (!user) {
-      throw new Error("Utilisateur non trouvé");
+      throw new AppError("Utilisateur non trouvé", 404);
     }
 
     const challenge = await challengeRepository.findOne({
@@ -27,7 +28,7 @@ export class TrainingSessionService {
     });
 
     if (!challenge) {
-      throw new Error("Challenge non trouvé");
+      throw new AppError("Challenge non trouvé", 404);
     }
 
     const existingSession = await trainingSessionRepository.findOne({
@@ -39,9 +40,8 @@ export class TrainingSessionService {
     });
 
     if (existingSession) {
-      throw new Error(
-        "Une séance existe déjà pour cette date et ce challenge."
-      );
+      throw new AppError(
+        "Une séance existe déjà pour cette date et ce challenge.", 409);
     }
     const session = trainingSessionRepository.create({
       user,
@@ -55,39 +55,27 @@ export class TrainingSessionService {
 
      try {
        await badgeService.checkAndAwardBadges(currentUserId);
-     } catch (error) {
-       console.log("Erreur lors de la vérification des badges:", error);
+     } catch (Error) {
+       console.log("Erreur lors de la vérification des badges:", Error);
      }
 
      try {
        await rewardService.checkAndAwardRewards(currentUserId);
-     } catch (error) {
-       console.log("Erreur lors de la vérification des récompenses:", error);
+     } catch (Error) {
+       console.log("Erreur lors de la vérification des récompenses:", Error);
      }
 
      return savedSession;
   }
 
-   async findAllSessionByUser(
-    userId: string,
-    startDate?: string,
-    endDate?: string
-  ) {
+   async findAllSessionByUser(userId: string) {
     const user = await userRepository.findOne({ where: { id: userId } });
 
     if (!user) {
-      throw new Error("Utilisateur non trouvé");
+      throw new AppError("Utilisateur non trouvé", 404);
     }
-    const where: any = {
-      user: { id: userId },
-    };
-
-    if (startDate && endDate) {
-      where.startDate = Between(new Date(startDate), new Date(endDate));
-    }
-
     return await trainingSessionRepository.find({
-      where: where,
+      where: { user: { id: userId } },
       relations: ["challenge"],
       order: { startDate: "DESC" },
     });
@@ -103,10 +91,10 @@ export class TrainingSessionService {
       relations: ["user"],
     });
     if (!session) {
-      throw new Error("Séance non trouvée");
+      throw new AppError("Séance non trouvée", 404);
     }
     if (session.user.id !== currentUserId) {
-      throw new Error("Vous ne pouvez pas modifié cette séance");
+      throw new AppError("Vous ne pouvez pas modifié cette séance", 403);
     }
 
     if (dto.startDate) {
@@ -128,11 +116,11 @@ export class TrainingSessionService {
       where: { id: sessionId },
     });
     if (!session) {
-      throw new Error("Séance non trouvée");
+      throw new AppError("Séance non trouvée", 404);
     }
 
     if (session.user.id !== currentUserId) {
-      throw new Error("Vous ne pouvez pas supprimer cette séance");
+      throw new AppError("Vous ne pouvez pas supprimer cette séance", 403);
     }
 
     return trainingSessionRepository.remove(session);
@@ -140,13 +128,13 @@ export class TrainingSessionService {
 
    async getTrainingStats(userId: string, challengeId: number) {
     if (!userId || !challengeId) {
-      throw new Error("Identifiants utilisateur ou challenge manquants");
+      throw new AppError("Identifiants utilisateur ou challenge manquants", 400);
     }
 
     const user = await userRepository.findOne({ where: { id: userId } });
 
     if (!user) {
-      throw new Error("Utilisateur non trouvé");
+      throw new AppError("Utilisateur non trouvé", 404);
     }
 
     const challenge = await challengeRepository.findOne({
@@ -154,13 +142,11 @@ export class TrainingSessionService {
     });
 
     if (!challenge) {
-      throw new Error("Challenge non trouvé");
+      throw new AppError("Challenge non trouvé", 404);
     }
 
     if (!challenge.startDate || !challenge.endDate) {
-      throw new Error(
-        "Les dates de début ou de fin du challenge sont invalides"
-      );
+      throw new AppError("Les dates de début ou de fin du challenge sont invalides", 400);
     }
 
     const sessions = await trainingSessionRepository.find({
@@ -172,9 +158,7 @@ export class TrainingSessionService {
     });
 
     if (sessions.length === 0) {
-      throw new Error(
-        "Aucune séance trouvée pour cet utilisateur dans ce challenge"
-      );
+      throw new AppError("Aucune séance trouvée pour cet utilisateur dans ce challenge", 404);
     }
 
     const totalCalories = sessions.reduce(
@@ -184,7 +168,6 @@ export class TrainingSessionService {
     const totalDuration = sessions.reduce((sum, s) => sum + s.duration, 0);
     const sessionCount = sessions.length;
 
-    //Progression en % du nombre de calories attients par rapport au calorie définis dans le défi
     let caloriesProgressPercent = 0;
     if (challenge.targetCalories > 0) {
       caloriesProgressPercent =
@@ -193,7 +176,6 @@ export class TrainingSessionService {
       caloriesProgressPercent = 0;
     }
 
-    //Progression en % du nombre de session attients par rapport au sessions définis dans le défi
     let sessionsProgressPercent = 0;
     if (challenge.requiredSessions > 0) {
       sessionsProgressPercent =

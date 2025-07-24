@@ -1,12 +1,11 @@
 import express from "express";
-import * as typeExerciceController from "../controllers/typeExercice.controller";
 import { verifyRoles } from "../middlewares/verifyRoles";
 import { verifyToken } from "../middlewares/auth";
-
+import { TypeExerciceController } from "../controllers/typeExercice.controller";
 import { Role } from "../enums/Role";
 
 const router = express.Router();
-
+const typeExerciceController = new TypeExerciceController()
 router.post(
   "/new",
   verifyToken,

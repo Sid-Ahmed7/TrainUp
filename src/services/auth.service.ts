@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { User } from "../entities/User";
 import { Register } from "../types/Register";
 import { Login } from "../types/Login";
+import {AppError} from "../utils/AppError"
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 const JWT_EXPIRATION = process.env.JWT_EXPIRATION!;
@@ -16,7 +17,7 @@ if (
   !JWT_SECRET_REFRESH ||
   !JWT_EXPIRATION_REFRESH
 ) {
-  throw new Error("JWT_SECRET ou JWT_EXPIRATION manquant");
+  throw new AppError("JWT_SECRET ou JWT_EXPIRATION manquant", 500);
 }
 
 const userRepository = AppDataSource.getRepository(User);
@@ -28,7 +29,7 @@ export class AuthService {
     });
 
     if (existingUser) {
-      throw new Error("Email déjà utilisé");
+      throw new AppError("Email déjà utilisé", 409);
     }
 
     const hashedPassword = await bcrypt.hash(credentials.password, 10);
@@ -51,7 +52,7 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new Error("Utilisateur non trouvé ");
+      throw new AppError("Utilisateur non trouvé", 404);
     }
 
     const checkPassword = bcrypt.compareSync(
@@ -59,7 +60,7 @@ export class AuthService {
       user.password
     );
     if (!checkPassword) {
-      throw new Error("Identifiants invalides");
+      throw new AppError("Identifiants invalides", 401);
     }
 
     const token = await this.generateToken(user);

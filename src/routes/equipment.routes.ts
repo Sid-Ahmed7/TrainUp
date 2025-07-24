@@ -1,12 +1,11 @@
 import express from "express";
-import * as equipmentController from "../controllers/equipment.controller";
 import { verifyRoles } from "../middlewares/verifyRoles";
 import { verifyToken } from "../middlewares/auth";
-
+import { EquipementController } from "../controllers/equipment.controller";
 import { Role } from "../enums/Role";
 
 const router = express.Router();
-
+const equipmentController = new EquipementController()
 router.post(
   "/new",
   verifyToken,

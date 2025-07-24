@@ -6,22 +6,23 @@ import { Equipment } from "../entities/Equipment";
 import { TypeExerciceEquipment } from "../entities/TypeExerciceEquipment";
 import { Target } from "../entities/Target";
 import { In } from "typeorm";
-import * as typeExerciceEquipmentService from "./typeExerciceEquipment.service";
+import  {TypeExerciceEquipmentService} from "../services/typeExerciceEquipment.service"
 import { CreateTypeExerciceDTO } from "../DTO/TypeExercice/createTypeExercice.dto";
 import { UpdateTypeExerciceDTO } from "../DTO/TypeExercice/updateTypeExercice.dto";
+import { AppError } from "../utils/AppError";
 
 const typeExerciceRepository = AppDataSource.getRepository(TypeExercice);
 const categoryRepository = AppDataSource.getRepository(Category);
 const targetRepository = AppDataSource.getRepository(Target);
-const typeExerciceEquipmentRepository = AppDataSource.getRepository(
-  TypeExerciceEquipment
-);
+const typeExerciceEquipmentRepository = AppDataSource.getRepository(TypeExerciceEquipment);
+const typeExerciceEquipmentService = new TypeExerciceEquipmentService()
+export class TypeExerciceService {
 
-export const createTypeExercice = async (dto: CreateTypeExerciceDTO) => {
+async createTypeExercice (dto: CreateTypeExerciceDTO)  {
   const category = await categoryRepository.findOneBy({ id: dto.categoryId });
 
   if (!category) {
-    throw new Error("Categorie non trouvé");
+    throw new AppError("Categorie non trouvé", 404);
   }
 
   const audiences = dto.audienceIds?.length
@@ -73,10 +74,10 @@ export const createTypeExercice = async (dto: CreateTypeExerciceDTO) => {
   return typeExercice;
 };
 
-export const updateTypeExercice = async (
+async updateTypeExercice (
   exerciceId: number,
   dto: UpdateTypeExerciceDTO
-) => {
+)  {
   const exo = await typeExerciceRepository.findOne({
     where: { id: exerciceId },
     relations: [
@@ -113,7 +114,7 @@ export const updateTypeExercice = async (
 
   if (dto.categoryId !== undefined) {
     const category = await categoryRepository.findOneBy({ id: dto.categoryId });
-    if (!category) throw new Error("Categorie non trouvé");
+    if (!category) throw new AppError("Categorie non trouvé", 404);
     exo.category = category;
   }
   if (dto.audienceIds !== undefined) {
@@ -152,7 +153,7 @@ export const updateTypeExercice = async (
   return res;
 };
 
-export const findAllTypeExercices = () => {
+async findAllTypeExercices() {
   return typeExerciceRepository.find({
     relations: [
       "category",
@@ -164,7 +165,7 @@ export const findAllTypeExercices = () => {
   });
 };
 
-export const findTypeExerciceById = (exerciceId: number) => {
+async findTypeExerciceById(exerciceId: number)  {
   return typeExerciceRepository.findOne({
     where: { id: exerciceId },
     relations: [
@@ -176,7 +177,10 @@ export const findTypeExerciceById = (exerciceId: number) => {
     ],
   });
 };
-export const deleteTypeExercice = async (id: number) => {
+async deleteTypeExercice (id: number)  {
   const result = await typeExerciceRepository.delete(id);
   return result.affected !== 0;
 };
+
+  
+}

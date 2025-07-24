@@ -5,6 +5,7 @@ import { Badge } from "../entities/Badge";
 import { UserBadge } from "../entities/UserBadge";
 import { User } from "../entities/User";
 import { TrainingSession } from "../entities/TrainingSession";
+import { AppError } from "../utils/AppError";
 
 const badgeRepository = AppDataSource.getRepository(Badge);
 const userBadgeRepository = AppDataSource.getRepository(UserBadge);
@@ -19,7 +20,7 @@ export class BadgeService {
     });
 
     if (existingBadge) {
-        throw new Error("Un badge avec ce nom existe déjà");
+        throw new AppError("Un badge avec ce nom existe déjà", 409);
     }
 
             const badge = badgeRepository.create({
@@ -52,7 +53,7 @@ export class BadgeService {
         });
 
         if (!badge) {
-            throw new Error("Badge introuvable");
+            throw new AppError("Badge introuvable", 404);
         }
 
         if (dto.name && dto.name !== badge.name) {
@@ -61,7 +62,7 @@ export class BadgeService {
             });
 
             if (existingBadge) {
-                throw new Error("Un badge avec ce nom existe déjà");
+                throw new AppError("Un badge avec ce nom existe déjà", 409);
             }
         }
 
@@ -79,7 +80,7 @@ export class BadgeService {
         const badge = await badgeRepository.findOne({ where: { id: badgeId } });
         
         if (!badge) {
-            throw new Error("Badge introuvable");
+            throw new AppError("Badge introuvable", 404);
         }
 
         return badgeRepository.delete(badgeId);
@@ -91,7 +92,7 @@ export class BadgeService {
         });
 
         if (existingUserBadge) {
-            throw new Error("L'utilisateur possède déjà ce badge");
+            throw new AppError("L'utilisateur possède déjà ce badge", 409);
         }
 
         const userBadge = userBadgeRepository.create({
@@ -129,15 +130,12 @@ export class BadgeService {
             const shouldAward = await this.checkBadgeRule(userId, badge);
             
             if (shouldAward) {
-                try {
                     const newBadge = await this.awardBadgeToUser(
                         userId, 
                         badge.id, 
                         shouldAward.reason
                     );
                     newBadges.push(newBadge);
-                } catch (error) {
-                }
             }
         }
 

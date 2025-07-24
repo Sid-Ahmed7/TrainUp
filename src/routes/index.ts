@@ -4,11 +4,12 @@ import targetRoutes from "./target.routes";
 import typeExerciceRoutes from "./typeExercice.routes";
 import equipmentRoutes from "./equipment.routes";
 import typeExerciceEquipmentRoutes from "./typeExerciceEquipment.routes";
-import TraniningRoomRoutes from "./trainingRoomRoutes";
+import TraniningRoomRoutes from "./TrainingRoomRoutes";
 import challengeRoutes from "./challenge.routes";
 import trainingSession from "./trainingSession.routes";
 import badgeRoutes from "./badgeRoutes";
 import rewardRoutes from "./rewardRoutes";
+import invitationRoutes from "./invitation.routes"
 export {
   authRoutes,
   categoryRoutes,
@@ -21,4 +22,5 @@ export {
   TraniningRoomRoutes,
   badgeRoutes,
   rewardRoutes,
+  invitationRoutes
 };
