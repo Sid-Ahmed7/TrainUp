@@ -30,7 +30,7 @@ rewards=(
   '{"name": "Entrainement Intensif", "description": "Bonus pour avoir cumule 2000 minutes d entrainement", "rewardType": "points", "rewardValue": "200 points bonus", "ruleType": "training_minutes", "ruleValue": 2000, "isActive": true}'
 )
 
-url="http://localhost:3000/api/reward/new"
+url="http://localhost:3000/api/rewards/new"
 
 for reward in "${rewards[@]}"; do
   curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $ADMIN_TOKEN" -d "$reward" "$url"

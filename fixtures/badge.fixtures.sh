@@ -30,7 +30,7 @@ badges=(
   '{"name": "Marathoner", "description": "Cumuler 1000 minutes d entrainement", "points": 500, "ruleType": "training_minutes", "ruleValue": 1000, "isActive": true}'
 )
 
-url="http://localhost:3000/api/badge/new"
+url="http://localhost:3000/api/badges/new"
 
 for badge in "${badges[@]}"; do
   curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $ADMIN_TOKEN" -d "$badge" "$url"
