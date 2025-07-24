@@ -2,6 +2,7 @@ import AppDataSource from "../config/db";
 import { CreateCategoryDTO } from "../DTO/Category/createCategory.dto";
 import { UpdateCategoryDTO } from "../DTO/Category/updateCategory.dto";
 import { Category } from "../entities/Category";
+import { AppError } from "../utils/AppError";
 
 const categoryRepository = AppDataSource.getRepository(Category);
 export class CategoryService {
@@ -10,7 +11,7 @@ export class CategoryService {
       where: { name: dto.name },
     });
     if (existingCategory) {
-      throw new Error(`La catégorie avec le nom ${dto.name} existe déjà`);
+      throw new AppError(`La catégorie avec le nom ${dto.name} existe déjà`, 409);
     }
     const category = categoryRepository.create({ name: dto.name });
     return await categoryRepository.save(category);
@@ -21,7 +22,7 @@ export class CategoryService {
       id: categoryId,
     });
     if (!updatedCategory) {
-      throw new Error(`La catégorie avec l'ID ${categoryId} introuvable.`);
+      throw new AppError(`La catégorie avec l'ID ${categoryId} introuvable.`, 404);
     }
     if (dto.name !== undefined) {
       updatedCategory.name = dto.name;
@@ -37,7 +38,7 @@ export class CategoryService {
   async findCategoryById(categoryId: number) {
     const category = await categoryRepository.findOneBy({ id: categoryId });
     if (!category) {
-      throw new Error(`Catégorie avec l'ID ${categoryId} non trouvée.`);
+      throw new AppError(`Catégorie avec l'ID ${categoryId} non trouvée.`, 404);
     }
     return category;
   }
@@ -45,7 +46,7 @@ export class CategoryService {
   async deleteCategory(categoryId: number) {
     const category = await categoryRepository.findOneBy({ id: categoryId });
     if (!category) {
-      throw new Error(`Catégorie avec l'ID ${categoryId} non trouvée.`);
+      throw new AppError(`Catégorie avec l'ID ${categoryId} non trouvée.`, 404);
     }
     const result = await categoryRepository.delete(categoryId);
     return result.affected !== 0;

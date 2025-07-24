@@ -6,6 +6,7 @@ import { TypeExercice } from "../entities/TypeExercice";
 import { User } from "../entities/User";
 import { In } from "typeorm";
 import { DifficultyLevel } from "../enums/DifficultyLevel";
+import { AppError } from "../utils/AppError";
 
 const challengeRepository = AppDataSource.getRepository(Challenge);
 const userRepository = AppDataSource.getRepository(User);
@@ -16,7 +17,7 @@ export class ChallengeService {
     const creator = await userRepository.findOneBy({ id: creatorId });
 
     if (!creator) {
-      throw new Error("le créateur du challenge n'existe pas");
+      throw new AppError("le créateur du challenge n'existe pas", 404);
     }
 
     const existingChallenge = await challengeRepository.findOne({
@@ -27,7 +28,7 @@ export class ChallengeService {
     });
 
     if (existingChallenge) {
-      throw new Error("Un challenge avec ce titre existe déjà.");
+      throw new AppError("Un challenge avec ce titre existe déjà.", 409);
     }
 
     let typeExercises: TypeExercice[] = [];
@@ -75,11 +76,11 @@ export class ChallengeService {
       relations: ["exercises", "participants", "creator"],
     });
     if (!challenge) {
-      throw new Error("Aucun challenge trouvé");
+      throw new AppError("Aucun challenge trouvé", 404);
     }
 
     if (challenge.creator.id !== currentUserId) {
-      throw new Error("Vous ne pouvez pas modifié ce challenge");
+      throw new AppError("Vous ne pouvez pas modifié ce challenge", 403);
     }
 
     let typeExercises: TypeExercice[] = [];
@@ -114,7 +115,7 @@ export class ChallengeService {
     }
     if (dto.difficulty !== undefined) {
       if (!Object.values(DifficultyLevel).includes(dto.difficulty)) {
-        throw new Error("Difficulté invalide");
+        throw new AppError("Difficulté invalide", 400);
       }
       challenge.difficulty = dto.difficulty;
     }
@@ -172,11 +173,11 @@ export class ChallengeService {
       relations: ["creator"],
     });
     if (!challenge) {
-      throw new Error("Aucun challenge trouvé");
+      throw new AppError("Aucun challenge trouvé", 404);
     }
 
     if (challenge.creator.id !== currentUserId) {
-      throw new Error("Vous ne pouvez pas supprimé ce challenge ");
+      throw new AppError("Vous ne pouvez pas supprimé ce challenge", 403);
     }
     return challengeRepository.delete(challengeId);
   }
@@ -188,13 +189,13 @@ export class ChallengeService {
     });
 
     if (!challenge) {
-      throw new Error("Aucun challenge trouvé");
+      throw new AppError("Aucun challenge trouvé", 404);
     }
     const participants = await userRepository.findBy({
       id: In(participantsIds),
     });
     if (participants.length === 0) {
-      throw new Error("Aucun participant trouvé");
+      throw new AppError("Aucun participant trouvé", 404);
     }
     if (!challenge.participants) {
       challenge.participants = [];

@@ -51,16 +51,7 @@ app.use("/api/challenge", routes.challengeRoutes);
 app.use("/api/session", routes.trainingSession);
 app.use("/api/badges", routes.badgeRoutes);
 app.use("/api/rewards", routes.rewardRoutes);
-app.use((req, res, next) => {
-  console.log(`\n🌐 === ${new Date().toISOString()} ===`);
-  console.log(`${req.method} ${req.originalUrl}`);
-  console.log(
-    "Headers:",
-    req.headers.authorization ? "TOKEN PRÉSENT" : "PAS DE TOKEN"
-  );
-  console.log("Query:", req.query);
-  console.log("Params:", req.params);
-  next();
-});
+app.use("/api/invitations", routes.invitationRoutes)
+
 export default app;
 export { AppDataSource };

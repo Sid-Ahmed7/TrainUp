@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { CreateBadgeDTO } from "../DTO/Badge/CreateBadgeDTO";
 import { UpdateBadgeDTO } from "../DTO/Badge/UpdateBadgeDTO";
 import { BadgeService } from "../services/badge.service";
+import { AppError } from "../utils/AppError";
 
 const badgeService = new BadgeService()
 export class BadgeController {
@@ -13,7 +14,12 @@ export class BadgeController {
             const badge = await badgeService.createBadge(dto);
             res.status(201).json(badge);
         } catch (error: any) {
-            res.status(400).json({ message: error.message });
+            if(error instanceof AppError) {
+                res.status(error.status).json({error: error.message})
+                return
+            }
+            res.status(500).json({ error: "Erreur lors de la création du badge" });
+            return
         }
     }
 
@@ -22,7 +28,12 @@ export class BadgeController {
             const badges = await badgeService.getAllBadges();
             res.status(200).json(badges);
         } catch (error: any) {
-            res.status(400).json({ message: error.message });
+             if(error instanceof AppError) {
+                res.status(error.status).json({error: error.message})
+                return
+            }
+            res.status(500).json({ error: "Erreur lors de la récupération des badges" });
+            return
         }
     }
 
@@ -37,7 +48,12 @@ export class BadgeController {
             
             res.status(200).json(badge);
         } catch (error: any) {
-            res.status(400).json({ message: error.message });
+            if(error instanceof AppError) {
+                res.status(error.status).json({error: error.message})
+                return
+            }
+            res.status(500).json({ error: "Erreur lors de la récupération du badge" });
+            return
         }
     }
 
@@ -49,7 +65,12 @@ export class BadgeController {
             const updatedBadge = await badgeService.updateBadge(badgeId, dto);
             res.status(200).json(updatedBadge);
         } catch (error: any) {
-            res.status(400).json({ message: error.message });
+             if(error instanceof AppError) {
+                res.status(error.status).json({error: error.message})
+                return
+            }
+            res.status(500).json({ error: "Erreur lors de la mise à jour du badge" });
+            return
         }
     }
 
@@ -64,7 +85,12 @@ export class BadgeController {
             
             res.status(204).send();
         } catch (error: any) {
-            res.status(400).json({ message: error.message });
+             if(error instanceof AppError) {
+                res.status(error.status).json({error: error.message})
+                return
+            }
+            res.status(500).json({ error: "Erreur lors de la suppresion du badge" });
+            return
         }
     }
 
@@ -77,7 +103,12 @@ export class BadgeController {
             const userBadge = await badgeService.awardBadgeToUser(userId, badgeId, reason);
             res.status(201).json(userBadge);
         } catch (error: any) {
-            res.status(400).json({ message: error.message });
+             if(error instanceof AppError) {
+                res.status(error.status).json({error: error.message})
+                return
+            }
+            res.status(500).json({ error: "Erreur lors de l'attribution du badge" });
+            return
         }
     }
 
@@ -87,7 +118,12 @@ export class BadgeController {
             const userBadges = await badgeService.getUserBadges(userId);
             res.status(200).json(userBadges);
         } catch (error: any) {
-            res.status(400).json({ message: error.message });
+             if(error instanceof AppError) {
+                res.status(error.status).json({error: error.message})
+                return
+            }
+            res.status(500).json({ error: "Erreur lors de la récupération des badges" });
+            return
         }
     }
 
@@ -97,7 +133,12 @@ export class BadgeController {
             const userBadges = await badgeService.getUserBadges(userId);
             res.status(200).json(userBadges);
         } catch (error: any) {
-            res.status(400).json({ message: error.message });
+             if(error instanceof AppError) {
+                res.status(error.status).json({error: error.message})
+                return
+            }
+            res.status(500).json({ error: "Erreur lors de la récupération des badges" });
+            return;
         }
     }
 
@@ -110,7 +151,12 @@ export class BadgeController {
                 badges: newBadges
             });
         } catch (error: any) {
-            res.status(400).json({ message: error.message });
+            if(error instanceof AppError) {
+                res.status(error.status).json({error: error.message})
+                return
+            }
+            res.status(500).json({ error: "Erreur lors de la l'attribution des badges" });
+            return
         }
     }
 } 

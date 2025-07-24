@@ -1,4 +1,4 @@
-import { User } from './entities/User'; // Adapte le chemin selon l'emplacement de ton entité User
+import { User } from './entities/User';
 
 declare global {
   namespace Express {

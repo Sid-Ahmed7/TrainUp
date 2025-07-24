@@ -1,12 +1,18 @@
 import { plainToClass } from "class-transformer";
 import { Request, Response } from "express";
-import * as typeExerciceEquipmentService from "../services/typeExerciceEquipment.service";
+import {TypeExerciceEquipmentService} from "../services/typeExerciceEquipment.service";
 import { CreateTypeExerciceEquipmentDTO } from "../DTO/TypeExerciceEquipment/createTypeExerciceEquipment.dto";
+import { AppError } from "../utils/AppError";
 
-export const createTypeExerciceEquipment = async (
+
+const typeExerciceEquipmentService = new TypeExerciceEquipmentService()
+
+export class TypeExerciceEquipmentController {
+
+async createTypeExerciceEquipment(
   req: Request,
   res: Response
-) => {
+) {
   const dto = plainToClass(CreateTypeExerciceEquipmentDTO, req.body);
 
   try {
@@ -17,20 +23,34 @@ export const createTypeExerciceEquipment = async (
       );
     res.status(201).json(typeExerciceEquipment);
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+     if(error instanceof AppError) {
+        res.status(error.status).json({error: error.message})
+        return
+      }
+      res.status(500).json({ error: "Erreur lors de la création" });
+      return;
   }
 };
 
-export const getAllTypeExerciceEquipment = async (
+
+async getAllTypeExerciceEquipment(
   req: Request,
   res: Response
-) => {
-  const typeExercicesEquipments =
-    await typeExerciceEquipmentService.getTypeExerciceEquipment();
-  res.status(200).json(typeExercicesEquipments);
+){
+  try {
+      const typeExercicesEquipments = await typeExerciceEquipmentService.getTypeExerciceEquipment();
+      res.status(200).json(typeExercicesEquipments);
+  } catch(error:any) {
+      if(error instanceof AppError) {
+        res.status(error.status).json({error: error.message})
+        return
+      }
+      res.status(500).json({ error: "Erreur lors de la récupération des exercices et équipements" });
+      return;
+  }
 };
 
-export const deleteByEquipmentId = async (req: Request, res: Response) => {
+async deleteByEquipmentId(req: Request, res: Response){
   const equipmentId = Number(req.params.id);
   const deleted = await typeExerciceEquipmentService.deleteByEquipmentId(
     equipmentId
@@ -43,7 +63,7 @@ export const deleteByEquipmentId = async (req: Request, res: Response) => {
   res.status(204).send();
 };
 
-export const deleteByExerciceId = async (req: Request, res: Response) => {
+async deleteByExerciceId(req: Request, res: Response) {
   const exerciceId = Number(req.params.id);
   const deleted = await typeExerciceEquipmentService.deleteByExerciceId(
     exerciceId
@@ -55,3 +75,7 @@ export const deleteByExerciceId = async (req: Request, res: Response) => {
   }
   res.status(204).send();
 };
+
+}
+
+

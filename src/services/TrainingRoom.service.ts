@@ -7,6 +7,7 @@ import { UpdateTrainingRoomOutDTO } from "../DTO/TrainingRoom/UpdateTrainingRoom
 import { TypeExercice } from "../entities/TypeExercice";
 import { Equipment } from "../entities/Equipment";
 import { TypeExerciceEquipment } from "../entities/TypeExerciceEquipment";
+import { AppError } from "../utils/AppError";
 const trainingRoomRepository = AppDataSource.getRepository(TrainingRoom);
 const userRepository = AppDataSource.getRepository(User);
 export class TrainingRoomService {
@@ -18,7 +19,7 @@ export class TrainingRoomService {
       where: { email: ownerEmail },
     });
     if (!owner) {
-      throw new Error("Propriétaire introuvable");
+      throw new AppError("Propriétaire introuvable", 404);
     }
     const typeExerciceEquipments = await this.buildTypeExerciceEquipments(
       roomData.typeExerciceEquipments
@@ -53,7 +54,7 @@ export class TrainingRoomService {
     });
 
     if (!room) {
-      throw new Error("Salle introuvable");
+      throw new AppError("Salle introuvable", 404);
     }
 
     return {
@@ -69,7 +70,7 @@ export class TrainingRoomService {
     });
 
     if (!room) {
-      throw new Error("Salle introuvable");
+      throw new AppError("Salle introuvable", 404);
     }
 
     return room;
@@ -85,7 +86,7 @@ export class TrainingRoomService {
 
     // Vérifier les permissions
     if (userRole !== "SUPER_ADMIN" && room.owner.id !== userId) {
-      throw new Error("Accès refusé");
+      throw new AppError("Accès refusé",403);
     }
 
     room.name = roomData.name ?? room.name;
@@ -149,7 +150,7 @@ export class TrainingRoomService {
     const user = await userRepository.findOneBy({ email: userEmail });
 
     if (!user) {
-      throw new Error("Utilisateur introuvable");
+      throw new AppError("Utilisateur introuvable", 404);
     }
     if (user.role === "OWNER") {
       room.owner = user;
@@ -177,13 +178,13 @@ export class TrainingRoomService {
     return Promise.all(
       (typeExerciceEquipmentsPayload || []).map(async (e) => {
         const exercice = await typeExerciceRepo.findOneBy({ id: e.exerciceId });
-        if (!exercice) throw new Error("Exercice introuvable");
+        if (!exercice) throw new AppError("Exercice introuvable", 404);
 
         let equipment: Equipment | undefined = undefined;
         if (e.equipmentId) {
           equipment =
             (await equipmentRepo.findOneBy({ id: e.equipmentId })) || undefined;
-          if (!equipment) throw new Error("Équipement introuvable");
+          if (!equipment) throw new AppError("Équipement introuvable", 404);
         }
 
         return typeExerciceEquipmentRepo.create({

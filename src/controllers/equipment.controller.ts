@@ -1,11 +1,14 @@
 import { plainToClass } from "class-transformer";
 import { Request, Response } from "express";
-import * as equipmentService from "../services/equipment.service";
+import {EquipmentService} from "../services/equipment.service";
 import { CreateEquipmentDTO  } from "../DTO/Equipment/createEquipment.dto";
 import { UpdateEquipmentDTO } from "../DTO/Equipment/updateEquipment.dto";
+import { AppError } from "../utils/AppError";
 
+const equipmentService = new EquipmentService()
 
-export const createEquipment = async (req: Request, res: Response) => {
+export class EquipementController {
+    async createEquipment(req: Request, res: Response){
     const dto = plainToClass(CreateEquipmentDTO, req.body);
 
     try {
@@ -13,47 +16,65 @@ export const createEquipment = async (req: Request, res: Response) => {
         res.status(201).json(equipment);
 
     } catch(error: any) {
-        res.status(500).json({message: error.message})
+        if(error instanceof AppError) {
+            res.status(error.status).json({error: error.message})
+            return
+        }
+        res.status(500).json({ error: "Erreur lors de la création d'un équipement" });
+        return
     }
 }
 
-export const getAllEquipments = async (req: Request, res: Response) => {
+ async getAllEquipments(req: Request, res: Response) {
     const equipments = await equipmentService.findAllEquipments();
     res.status(200).json(equipments);
 }
 
-export const getEquipment = async (req: Request, res: Response) => {
-    const equipment = await equipmentService.findEquipmentById(Number(req.params.id))
-    
-    if(!equipment) {
-        return res.status(404).json({ message: "Aucun equipement trouvé" })
+ async getEquipment(req: Request, res: Response) {
+    const equipmentId = Number(req.params.id)
+    try {
+        const equipment = await equipmentService.findEquipmentById(equipmentId);
+        res.status(200).json(equipment);
+    } catch (error:any) {
+        if(error instanceof AppError) {
+            res.status(error.status).json({error: error.message})
+            return
+        }
+        res.status(500).json({ error: "Erreur lors de la récupération d'un équipement" });
+        return
     }
     
-    res.status(200).json(equipment);
 }
 
 
-export const updateEquipment = async (req: Request, res: Response) => {
+    async updateEquipment(req: Request, res: Response){
     const dto = plainToClass(UpdateEquipmentDTO, req.body);
     const id = Number(req.params.id)
     try {
         const updatedEquipment = await equipmentService.updateEquipment(id, dto);
-        if (!updatedEquipment) {
-            return res.status(404).json({ message: "Aucun equipement trouvé"})
-        
-        }
         return res.status(200).json(updatedEquipment);
     } catch(error: any) {
-        res.status(500).json({message: error.message})
+        if(error instanceof AppError) {
+            res.status(error.status).json({error: error.message})
+            return
+        }
+        res.status(500).json({ error: "Erreur lors de la mise à jour d'un équipement" });
+        return
     }
 }
 
-export const deleteEquipment = async (req: Request, res: Response) => {
+ async deleteEquipment(req: Request, res: Response) {
   const id = Number(req.params.id);
-  const deletedEquipment = await equipmentService.deleteEquipment(id);
-  if (!deletedEquipment){
-    return res.status(404).json({ message: "Aucun equipement trouvé" });
+  try {
+      await equipmentService.deleteEquipment(id);
+      res.status(204).send();
+  } catch (error:any) {
+    if(error instanceof AppError) {
+            res.status(error.status).json({error: error.message})
+            return
+        }
+        res.status(500).json({ error: "Erreur lors de la suppression d'un équipement" });
+        return
   }
-  res.status(204).send();
-};
+}}
 
