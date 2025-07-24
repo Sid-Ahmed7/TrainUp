@@ -15,7 +15,10 @@ const userRepository = AppDataSource.getRepository(User);
 const challengeRepository = AppDataSource.getRepository(Challenge);
 
 export class TrainingSessionService {
-   async createTrainingSession(dto: CreateTrainingSessionDTO, currentUserId:string) {
+  async createTrainingSession(
+    dto: CreateTrainingSessionDTO,
+    currentUserId: string
+  ) {
     const user = await userRepository.findOne({ where: { id: currentUserId } });
 
     if (!user) {
@@ -53,22 +56,26 @@ export class TrainingSessionService {
 
     const savedSession = await trainingSessionRepository.save(session);
 
-     try {
-       await badgeService.checkAndAwardBadges(currentUserId);
-     } catch (error) {
-       console.log("Erreur lors de la vérification des badges:", error);
-     }
+    try {
+      await badgeService.checkAndAwardBadges(currentUserId);
+    } catch (error) {
+      console.log("Erreur lors de la vérification des badges:", error);
+    }
 
-     try {
-       await rewardService.checkAndAwardRewards(currentUserId);
-     } catch (error) {
-       console.log("Erreur lors de la vérification des récompenses:", error);
-     }
+    try {
+      await rewardService.checkAndAwardRewards(currentUserId);
+    } catch (error) {
+      console.log("Erreur lors de la vérification des récompenses:", error);
+    }
 
-     return savedSession;
+    // Retourne la session avec seulement l'id du user
+    return {
+      ...savedSession,
+      user: { id: savedSession.user.id },
+    };
   }
 
-   async findAllSessionByUser(
+  async findAllSessionByUser(
     userId: string,
     startDate?: string,
     endDate?: string
@@ -93,7 +100,7 @@ export class TrainingSessionService {
     });
   }
 
-   async updateTrainingSession(
+  async updateTrainingSession(
     sessionId: number,
     dto: UpdateTrainingSessionDTO,
     currentUserId: string
@@ -120,12 +127,19 @@ export class TrainingSessionService {
       session.duration = dto.duration;
     }
 
-    return trainingSessionRepository.save(session);
+    const updatedSession = await trainingSessionRepository.save(session);
+    return {
+      ...updatedSession,
+      user: { id: updatedSession.user.id },
+    };
   }
 
-   async deleteTrainingSession(sessionId: number, currentUserId: string) {
+  async deleteTrainingSession(sessionId: number, currentUserId: string) {
+    console.log("Deleting session with ID:", sessionId);
+    console.log("Current user ID:", currentUserId);
     const session = await trainingSessionRepository.findOne({
       where: { id: sessionId },
+      relations: ["user"],
     });
     if (!session) {
       throw new Error("Séance non trouvée");
@@ -138,7 +152,7 @@ export class TrainingSessionService {
     return trainingSessionRepository.remove(session);
   }
 
-   async getTrainingStats(userId: string, challengeId: number) {
+  async getTrainingStats(userId: string, challengeId: number) {
     if (!userId || !challengeId) {
       throw new Error("Identifiants utilisateur ou challenge manquants");
     }
@@ -167,7 +181,6 @@ export class TrainingSessionService {
       where: {
         user: { id: userId },
         challenge: { id: challengeId },
-        
       },
     });
 

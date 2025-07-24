@@ -21,23 +21,21 @@ router.get(
     trainingSessionController.getSessionByUser(req, res).catch(next);
   }
 );
-router.get("/stats/:challengeId", verifyToken, verifyRoles(Role.USER),(req, res, next) => {
-    trainingSessionController.getTrainingStats(req, res, next).catch(next);
-  })
-
-
-router.put(
-  "/:sessionId",
+router.get(
+  "/stats/:challengeId",
   verifyToken,
   verifyRoles(Role.USER),
   (req, res, next) => {
-    trainingSessionController.updateSession(req, res).catch(next);
+    trainingSessionController.getTrainingStats(req, res, next).catch(next);
   }
 );
 
-router.delete("/:id", verifyToken, verifyRoles(Role.USER), (req, res, next) => {
-  trainingSessionController.deleteSesison(req, res).catch(next);
+router.put("/:id", verifyToken, verifyRoles(Role.USER), (req, res, next) => {
+  trainingSessionController.updateSession(req, res).catch(next);
 });
 
+router.delete("/:id", verifyToken, verifyRoles(Role.USER), (req, res, next) => {
+  trainingSessionController.deleteSession(req, res).catch(next);
+});
 
 export default router;
