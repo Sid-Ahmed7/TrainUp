@@ -15,7 +15,7 @@ router.get("/:id", (req, res, next) => {
 });
 
 router.post(
-  "/nouveau",
+  "/new",
   verifyToken,
   verifyRoles(Role.SUPER_ADMIN),
   (req, res, next) => {
