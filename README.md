@@ -38,7 +38,7 @@ openssl rand -hex 32
 chmod +x ./*.sh
 ```
 
-3. Créez un fichier .env
+3. Créez un fichier .env.local
 
 ```shell
 DB_HOST=DB_HOST

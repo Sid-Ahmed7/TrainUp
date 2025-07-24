@@ -14,7 +14,7 @@ import { UserReward } from "../entities/UserReward";
 import { Challenge } from "../entities/Challenge";
 import { TrainingSession } from "../entities/TrainingSession";
 import { Invitation } from "../entities/Invitation";
-config();
+config({ path: ".env.local" });
 
 const AppDataSource = new DataSource({
   type: "postgres",

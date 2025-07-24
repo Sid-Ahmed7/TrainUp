@@ -6,7 +6,7 @@ import swaggerUi from "swagger-ui-express";
 import cors from "cors";
 import * as routes from "./routes/index";
 import AppDataSource from "./config/db";
-config();
+config({ path: ".env.local" });
 
 const app = express();
 const corsOptions = {
@@ -51,7 +51,7 @@ app.use("/api/challenge", routes.challengeRoutes);
 app.use("/api/session", routes.trainingSession);
 app.use("/api/badges", routes.badgeRoutes);
 app.use("/api/rewards", routes.rewardRoutes);
-app.use("/api/invitations", routes.invitationRoutes)
+app.use("/api/invitations", routes.invitationRoutes);
 
 export default app;
 export { AppDataSource };
