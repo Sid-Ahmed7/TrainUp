@@ -13,6 +13,7 @@ import { Reward } from "../entities/Reward";
 import { UserReward } from "../entities/UserReward";
 import { Challenge } from "../entities/Challenge";
 import { TrainingSession } from "../entities/TrainingSession";
+import { Invitation } from "../entities/Invitation";
 config();
 
 const AppDataSource = new DataSource({
@@ -36,6 +37,7 @@ const AppDataSource = new DataSource({
     UserBadge,
     Reward,
     UserReward,
+    Invitation,
   ],
   synchronize: true,
   /*logging: ["query", "error"],
