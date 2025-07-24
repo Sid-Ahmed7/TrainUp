@@ -8,7 +8,7 @@ const invitationController = new InvitationController();
 
 router.post("/send", verifyToken,verifyRoles(Role.USER), invitationController.sendInvitation);
 
-router.get("/sent", verifyToken,verifyRoles(Role.USER), invitationController.getSendInvitation);
+router.get("/sent", verifyToken,verifyRoles(Role.USER), invitationController.getAllSendInvitation);
 
 router.get("/received",verifyToken,verifyRoles(Role.USER), invitationController.getReceiverInvitation);
 

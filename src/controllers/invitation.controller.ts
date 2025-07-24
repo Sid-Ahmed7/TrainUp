@@ -23,11 +23,11 @@ export class InvitationController {
     }
   }
 
-  async getSendInvitation(req: Request, res: Response) {
+  async getAllSendInvitation(req: Request, res: Response) {
     const senderId = req.user.id
 
     try {
-    const invitations = await invitationService.getSendInvitation(senderId)
+    const invitations = await invitationService.getAllSendInvitation(senderId)
     res.status(200).json(invitations);
     } catch(error:any) {
       if(error instanceof AppError) {
